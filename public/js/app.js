@@ -14774,18 +14774,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mapbox_gl_dist_mapbox_gl_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mapbox_gl_dist_mapbox_gl_js__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'Map',
+  name: "Map",
   data: function data() {
     return {};
   },
   mounted: function mounted() {
     (mapbox_gl_dist_mapbox_gl_js__WEBPACK_IMPORTED_MODULE_0___default().accessToken) = "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q";
     var map = new (mapbox_gl_dist_mapbox_gl_js__WEBPACK_IMPORTED_MODULE_0___default().Map)({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [19.0676, 51.9577],
       zoom: 5.2
     });
+    var el = document.createElement("div");
+    el.className = "marker";
+    el.innerText = "X";
+    el.style.width = "10px";
+    el.style.height = "12px"; // Position it accordingly
+
+    el.style.marginLeft = "-5px";
+    el.style.marginTop = "18px";
+    new (mapbox_gl_dist_mapbox_gl_js__WEBPACK_IMPORTED_MODULE_0___default().Marker)(el, {
+      offset: [-5, -12]
+    }).setLngLat([20, 53]).addTo(map);
   }
 });
 
@@ -19386,16 +19397,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  id: "map-relative"
+};
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-  id: "map",
-  "class": "map-main"
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+  id: "map"
 }, null, -1
 /* HOISTED */
 );
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [_hoisted_1]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [_hoisted_2]);
 }
 
 /***/ }),
@@ -19534,7 +19547,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.map-main {\n    width: 550px;\n    height: 550px;\n}\n.mapboxgl-ctrl-bottom-right {\n    display: none;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#map-relative {\n    position: relative;\n    height: 600px;\n}\n#map {\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    width: 100%;\n    height: 600px;\n}\n.marker {\n    display: block;\n    border: none;\n    cursor: pointer;\n    padding: 0;\n    position: relative;\n    display: inline-block;\n    cursor: pointer;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
