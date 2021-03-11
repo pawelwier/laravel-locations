@@ -31,7 +31,9 @@ export default {
         this.locations.map((location) =>
             L.marker([location.latitude, location.longitude])
                 .addTo(map)
-                .on("click", () => console.log(location.title))
+                .on("click", () => {
+                    this.$inertia.get(`/locations/${location.id}`);
+                })
         );
     },
 };

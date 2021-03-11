@@ -51,9 +51,11 @@ class LocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Location $location)
     {
-        //
+        return Inertia::render('Location', [
+            'location' => Location::find($location->id)
+        ]);
     }
 
     /**
@@ -74,9 +76,15 @@ class LocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Location $location)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+        ]);
+
+        $location->update($request->all());
+
+        return redirect('/locations')->with('success', 'Location updated');
     }
 
     /**
