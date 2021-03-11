@@ -14,7 +14,6 @@ export default {
         };
     },
     mounted() {
-        console.log(this.locations);
         const map = L.map("mapContainer").setView([52, 19], 6);
 
         L.tileLayer(
@@ -34,6 +33,7 @@ export default {
                 .on("click", () => {
                     this.$inertia.get(`/locations/${location.id}`);
                 })
+                .on("mouseover", () => console.log(location.title))
         );
     },
 };

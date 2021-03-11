@@ -7,6 +7,7 @@
         <inertia-link class="navbar-brand" href="/dashboard"
             >Dashboard</inertia-link
         >
+        <inertia-link class="navbar-brand" href="/login">Login</inertia-link>
     </layout>
 </template>
 

@@ -4,10 +4,11 @@
             class="navbar navbar-expand-md navbar-light bg-white shadow-sm navbar-main"
         >
             <inertia-link class="navbar-brand" href="/">Locations</inertia-link>
-            <button @click="logout">Logout</button>
-            <div>
-                {{ user_info }}
-                {{ $page.props.user_info }}
+            <div v-if="user_info">
+                <div class="navbar-brand">{{ user_info.name }}</div>
+                <inertia-link class="navbar-brand" @click="logout"
+                    >Logout</inertia-link
+                >
             </div>
         </header>
         <article>
