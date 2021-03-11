@@ -1,69 +1,45 @@
 <template>
-    <div id="map-relative">
-        <div id="map"></div>
-    </div>
+    <div id="mapContainer" class="basemap"></div>
 </template>
 
 <script>
-import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
+import * as L from "leaflet";
 
 export default {
     name: "Map",
+    props: { locations: Array },
     data() {
-        return {};
+        return {
+            accessToken: process.env.MIX_MAP_TOKEN,
+        };
     },
-
     mounted() {
-        mapboxgl.accessToken = process.env.MIX_MAP_TOKEN;
-        const map = new mapboxgl.Map({
-            container: "map",
-            style: "mapbox://styles/mapbox/streets-v11",
-            center: [19.0676, 51.9577],
-            zoom: 5.2,
-        });
+        console.log(this.locations);
+        const map = L.map("mapContainer").setView([52, 19], 6);
 
-        var el = document.createElement("div");
-        el.className = "marker";
-        el.innerText = "X";
-        el.style.width = "10px";
-        el.style.height = "12px";
+        L.tileLayer(
+            "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+            {
+                maxZoom: 18,
+                id: "mapbox/streets-v11",
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: this.accessToken,
+            }
+        ).addTo(map);
 
-        // Position it accordingly
-        el.style.marginLeft = "-5px";
-        el.style.marginTop = "18px";
-
-        new mapboxgl.Marker(el, {
-            offset: [-5, -12],
-        })
-            .setLngLat([20, 53])
-            .addTo(map);
+        this.locations.map((location) =>
+            L.marker([location.latitude, location.longitude])
+                .addTo(map)
+                .on("click", () => console.log(location.title))
+        );
     },
 };
 </script>
 
 <style>
-#map-relative {
-    position: relative;
-    height: 600px;
-}
-#map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 600px;
-}
-.marker {
-    display: block;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.basemap {
+    height: 38em;
+    width: 40em;
 }
 </style>

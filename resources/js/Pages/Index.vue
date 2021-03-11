@@ -2,13 +2,16 @@
     <layout>
         <h2>index</h2>
         <inertia-link class="navbar-brand" href="/locations"
-            >locations</inertia-link
+            >Locations</inertia-link
+        >
+        <inertia-link class="navbar-brand" href="/dashboard"
+            >Dashboard</inertia-link
         >
     </layout>
 </template>
 
 <script>
-import Layout from '../Shared/Layout.vue';
+import Layout from "../Shared/Layout.vue";
 
 export default {
     components: {
@@ -17,4 +20,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+inertia-link {
+    display: block;
+}
+</style>

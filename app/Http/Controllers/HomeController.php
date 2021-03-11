@@ -18,15 +18,15 @@ class HomeController extends Controller
         // $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         return Inertia::render('Index', [
             'info' => 'hey hey info'
         ]);
+    }
+
+    public function dashboard()
+    {
+        return Inertia::render('Dashboard');
     }
 }
