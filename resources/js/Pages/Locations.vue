@@ -1,13 +1,12 @@
 <template>
     <layout>
-        Mapa:
         <Map :locations="locations"></Map>
     </layout>
 </template>
 
 <script>
-import Layout from "../Shared/Layout.vue";
-import Map from "../Shared/Map.vue";
+import Layout from "../Shared/Layout";
+import Map from "../Shared/Map";
 
 export default {
     props: ["locations"],

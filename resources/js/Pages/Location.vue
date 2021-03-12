@@ -1,16 +1,18 @@
 <template>
     <layout>
-        <div><strong>Title:</strong> {{ location.title }}</div>
+        <div class="title-container">
+            <strong>Title:</strong>
+            <form @submit.prevent="changeTitle">
+                <input v-model="title" />
+                <button type="submit">Zmień</button>
+            </form>
+        </div>
         <div><strong>Description:</strong> {{ location.description }}</div>
-        <form @submit.prevent="changeTitle">
-            <input v-model="title" />
-            <button type="submit">Zmień</button>
-        </form>
     </layout>
 </template>
 
 <script>
-import Layout from "../Shared/Layout.vue";
+import Layout from "../Shared/Layout";
 
 export default {
     props: ["location"],
@@ -19,7 +21,7 @@ export default {
     },
     data() {
         return {
-            title: null,
+            title: this.location.title,
         };
     },
     methods: {
@@ -32,4 +34,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.title-container {
+    display: flex;
+}
+.title-container input {
+    margin-left: 0.4em;
+}
+</style>

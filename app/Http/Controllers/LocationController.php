@@ -42,7 +42,15 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'user_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'longitude' => 'required',
+            'latitude' => 'required'
+        ]);
+
+        $request->user()->locations()->create($request->only('body'));
     }
 
     /**

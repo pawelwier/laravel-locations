@@ -17,4 +17,4 @@ Route::get('/',  [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::resource('locations',  App\Http\Controllers\LocationController::class)
     ->middleware(['auth:sanctum', 'verified'])
-    ->only('index', 'show', 'update');
+    ->only('index', 'show', 'store', 'update');
