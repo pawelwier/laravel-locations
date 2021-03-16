@@ -6,7 +6,7 @@
             <inertia-link class="navbar-brand" href="/">Locations</inertia-link>
             <div v-if="user_info">
                 <div class="navbar-brand">{{ user_info.name }}</div>
-                <inertia-link class="navbar-brand" @click="logout"
+                <inertia-link href="" class="navbar-brand" @click="logout"
                     >Logout</inertia-link
                 >
             </div>
@@ -22,6 +22,7 @@ import { usePage } from "@inertiajs/inertia-vue3";
 export default {
     setup() {
         const user_info = computed(() => usePage().props.value.user_info);
+
         return { user_info };
     },
 

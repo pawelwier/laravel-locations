@@ -1,0 +1,43 @@
+<template>
+    <form @submit.prevent="addLocation">
+        X: <input v-model="form.longitude" /><br />
+        Y: <input v-model="form.latitude" /><br />
+        Title: <input v-model="form.title" /><br />
+        Description: <input v-model="form.description" /><br />
+        <button type="submit">Dodaj</button>
+    </form>
+</template>
+
+<script>
+import { computed } from "vue";
+import { usePage } from "@inertiajs/inertia-vue3";
+
+export default {
+    setup() {
+        const user_info = computed(() => usePage().props.value.user_info);
+        return { user_info };
+    },
+    name: "CreateLocationForm",
+    data() {
+        return {
+            form: {
+                latitude: null,
+                longitude: null,
+                title: null,
+                description: null,
+                user_id: null,
+            },
+        };
+    },
+    methods: {
+        addLocation() {
+            this.$inertia.post("/locations", {
+                ...this.form,
+                user_id: this.user_info.id,
+            });
+        },
+    },
+};
+</script>
+
+<style></style>

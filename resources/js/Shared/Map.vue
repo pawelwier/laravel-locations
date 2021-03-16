@@ -24,8 +24,8 @@ export default {
     methods: {
         displayPopup(e, text) {
             this.$refs.popupMarker.setPositionContent(
-                e.layerPoint.x,
-                e.layerPoint.y,
+                e.containerPoint.x,
+                e.containerPoint.y,
                 text
             );
             this.popupDisplayed = true;

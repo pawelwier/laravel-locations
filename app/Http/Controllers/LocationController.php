@@ -50,7 +50,7 @@ class LocationController extends Controller
             'latitude' => 'required'
         ]);
 
-        $request->user()->locations()->create($request->only('body'));
+        $request->user()->locations()->create($request->all());
     }
 
     /**
