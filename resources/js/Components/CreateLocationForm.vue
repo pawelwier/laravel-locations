@@ -2,7 +2,8 @@
     <form @submit.prevent="addLocation">
         Title: <input v-model="form.title" /><br />
         Description: <input v-model="form.description" /><br />
-        <button type="submit">Dodaj</button>
+        <button class="btn">Anuluj</button>
+        <button class="btn btn-primary" type="submit">Dodaj</button>
     </form>
 </template>
 

@@ -14965,22 +14965,24 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.popupMarker.setPositionContent(e.containerPoint.x, e.containerPoint.y, text);
       this.popupDisplayed = true;
     },
-    toggleAddMarkerForm: function toggleAddMarkerForm() {
-      this.showAddMarkerForm = !this.showAddMarkerForm;
+    displayAddMarkerForm: function displayAddMarkerForm() {
+      this.showAddMarkerForm = true;
+    },
+    hideAddMarkerForm: function hideAddMarkerForm() {
+      this.showAddMarkerForm = false;
     },
     onAddNewLocation: function onAddNewLocation(e) {
-      this.toggleAddMarkerForm();
+      this.displayAddMarkerForm();
       this.addLatLng = {
         longitude: e.latlng.lng,
         latitude: e.latlng.lat
       };
-      console.log(this.addLatLng);
     }
   },
   mounted: function mounted() {
     var _this = this;
 
-    var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", this.onAddNewLocation);
+    var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", this.onAddNewLocation).on("click", this.hideAddMarkerForm);
     leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
       maxZoom: 18,
       id: "mapbox/streets-v11",
@@ -15029,6 +15031,13 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 );
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  "class": "btn"
+}, "Anuluj", -1
+/* HOISTED */
+);
+
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  "class": "btn btn-primary",
   type: "submit"
 }, "Dodaj", -1
 /* HOISTED */
@@ -15051,7 +15060,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.description]]), _hoisted_4, _hoisted_5], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.description]]), _hoisted_4, _hoisted_5, _hoisted_6], 32
   /* HYDRATE_EVENTS */
   );
 }

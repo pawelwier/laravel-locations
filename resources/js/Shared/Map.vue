@@ -42,23 +42,27 @@ export default {
             this.popupDisplayed = true;
         },
 
-        toggleAddMarkerForm() {
-            this.showAddMarkerForm = !this.showAddMarkerForm;
+        displayAddMarkerForm() {
+            this.showAddMarkerForm = true;
+        },
+
+        hideAddMarkerForm() {
+            this.showAddMarkerForm = false;
         },
 
         onAddNewLocation(e) {
-            this.toggleAddMarkerForm();
+            this.displayAddMarkerForm();
             this.addLatLng = {
                 longitude: e.latlng.lng,
                 latitude: e.latlng.lat,
             };
-            console.log(this.addLatLng);
         },
     },
     mounted() {
         const map = L.map("mapContainer")
             .setView([52, 19], 6)
-            .on("contextmenu", this.onAddNewLocation);
+            .on("contextmenu", this.onAddNewLocation)
+            .on("click", this.hideAddMarkerForm);
 
         L.tileLayer(
             "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
