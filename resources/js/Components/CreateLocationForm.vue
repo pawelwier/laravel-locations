@@ -1,7 +1,5 @@
 <template>
     <form @submit.prevent="addLocation">
-        X: <input v-model="form.longitude" /><br />
-        Y: <input v-model="form.latitude" /><br />
         Title: <input v-model="form.title" /><br />
         Description: <input v-model="form.description" /><br />
         <button type="submit">Dodaj</button>
@@ -18,11 +16,17 @@ export default {
         return { user_info };
     },
     name: "CreateLocationForm",
+    props: {
+        latlng: {
+            longitude: null,
+            latitude: null,
+        },
+    },
     data() {
         return {
             form: {
-                latitude: null,
                 longitude: null,
+                latitude: null,
                 title: null,
                 description: null,
                 user_id: null,
@@ -33,6 +37,8 @@ export default {
         addLocation() {
             this.$inertia.post("/locations", {
                 ...this.form,
+                longitude: this.latlng.longitude,
+                latitude: this.latlng.latitude,
                 user_id: this.user_info.id,
             });
         },

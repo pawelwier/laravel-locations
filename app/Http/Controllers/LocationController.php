@@ -51,6 +51,8 @@ class LocationController extends Controller
         ]);
 
         $request->user()->locations()->create($request->all());
+
+        return redirect('/locations')->with('success', 'Location updated');
     }
 
     /**

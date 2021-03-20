@@ -3,22 +3,33 @@
     <div v-show="popupDisplayed">
         <popup-marker ref="popupMarker"></popup-marker>
     </div>
+    <create-location-form
+        v-if="this.showAddMarkerForm"
+        :latlng="this.addLatLng"
+    ></create-location-form>
 </template>
 
 <script>
 import * as L from "leaflet";
 import PopupMarker from "../Components/PopupMarker";
+import CreateLocationForm from "../Components/CreateLocationForm";
 
 export default {
     name: "Map",
     components: {
         PopupMarker,
+        CreateLocationForm,
     },
     props: { locations: Array },
     data() {
         return {
             accessToken: process.env.MIX_MAP_TOKEN,
             popupDisplayed: false,
+            showAddMarkerForm: false,
+            addLatLng: {
+                longitude: null,
+                latitude: null,
+            },
         };
     },
     methods: {
@@ -30,9 +41,24 @@ export default {
             );
             this.popupDisplayed = true;
         },
+
+        toggleAddMarkerForm() {
+            this.showAddMarkerForm = !this.showAddMarkerForm;
+        },
+
+        onAddNewLocation(e) {
+            this.toggleAddMarkerForm();
+            this.addLatLng = {
+                longitude: e.latlng.lng,
+                latitude: e.latlng.lat,
+            };
+            console.log(this.addLatLng);
+        },
     },
     mounted() {
-        const map = L.map("mapContainer").setView([52, 19], 6);
+        const map = L.map("mapContainer")
+            .setView([52, 19], 6)
+            .on("contextmenu", this.onAddNewLocation);
 
         L.tileLayer(
             "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
