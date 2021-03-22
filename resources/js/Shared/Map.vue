@@ -6,11 +6,14 @@
     <create-location-form
         v-if="this.showAddMarkerForm"
         :latlng="this.addLatLng"
+        @canceled="hideAddMarkerForm"
+        @locations-updated="refreshLocations"
     ></create-location-form>
 </template>
 
 <script>
 import * as L from "leaflet";
+import { Inertia } from "@inertiajs/inertia";
 import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
 
@@ -56,6 +59,10 @@ export default {
                 longitude: e.latlng.lng,
                 latitude: e.latlng.lat,
             };
+        },
+        refreshLocations() {
+            this.$emit("locations-updated-parent");
+            console.log(this.locations);
         },
     },
     mounted() {

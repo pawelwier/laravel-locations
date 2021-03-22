@@ -2,7 +2,7 @@
     <form @submit.prevent="addLocation">
         Title: <input v-model="form.title" /><br />
         Description: <input v-model="form.description" /><br />
-        <button class="btn">Anuluj</button>
+        <button class="btn" @click="onCancel">Anuluj</button>
         <button class="btn btn-primary" type="submit">Dodaj</button>
     </form>
 </template>
@@ -42,6 +42,10 @@ export default {
                 latitude: this.latlng.latitude,
                 user_id: this.user_info.id,
             });
+            this.$emit("locations-updated");
+        },
+        onCancel() {
+            this.$emit("canceled");
         },
     },
 };

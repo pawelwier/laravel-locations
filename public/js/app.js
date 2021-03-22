@@ -12975,6 +12975,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         latitude: this.latlng.latitude,
         user_id: this.user_info.id
       }));
+      this.$emit("locations-updated");
+    },
+    onCancel: function onCancel() {
+      this.$emit("canceled");
     }
   }
 });
@@ -14348,6 +14352,11 @@ __webpack_require__.r(__webpack_exports__);
       this.$inertia.put("/locations/".concat(this.location.id), {
         title: this.title
       });
+    },
+    onDeleteLocation: function onDeleteLocation() {
+      this.$inertia["delete"]("/locations/".concat(this.location.id), {
+        id: this.location.id
+      });
     }
   }
 });
@@ -14365,15 +14374,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
-/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["locations"],
   components: {
-    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__.default,
-    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_1__.default
+    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__.default,
+    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_2__.default
+  },
+  methods: {
+    refreshLocationsParent: function refreshLocationsParent() {
+      console.log(123456);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia.reload({
+        only: ["locations"]
+      });
+    }
   }
 });
 
@@ -14935,16 +14954,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
-/* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
+/* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Map",
   components: {
-    PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_1__.default,
-    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_2__.default
+    PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__.default,
+    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__.default
   },
   props: {
     locations: Array
@@ -14977,6 +14998,10 @@ __webpack_require__.r(__webpack_exports__);
         longitude: e.latlng.lng,
         latitude: e.latlng.lat
       };
+    },
+    refreshLocations: function refreshLocations() {
+      this.$emit("locations-updated-parent");
+      console.log(this.locations);
     }
   },
   mounted: function mounted() {
@@ -15031,12 +15056,6 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 );
 
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-  "class": "btn"
-}, "Anuluj", -1
-/* HOISTED */
-);
-
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
   "class": "btn btn-primary",
   type: "submit"
 }, "Dodaj", -1
@@ -15045,7 +15064,7 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("form", {
-    onSubmit: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+    onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.addLocation && $options.addLocation.apply($options, arguments);
     }, ["prevent"]))
   }, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
@@ -15060,7 +15079,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.description]]), _hoisted_4, _hoisted_5, _hoisted_6], 32
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.description]]), _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+    "class": "btn",
+    onClick: _cache[3] || (_cache[3] = function () {
+      return $options.onCancel && $options.onCancel.apply($options, arguments);
+    })
+  }, "Anuluj"), _hoisted_5], 32
   /* HYDRATE_EVENTS */
   );
 }
@@ -18234,6 +18258,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 );
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  "class": "btn",
   type: "submit"
 }, "Zmień", -1
 /* HOISTED */
@@ -18262,7 +18287,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* HYDRATE_EVENTS */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.location.description), 1
       /* TEXT */
-      )])];
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        "class": "btn btn-outline-danger btn-sm",
+        onClick: _cache[3] || (_cache[3] = function () {
+          return $options.onDeleteLocation && $options.onDeleteLocation.apply($options, arguments);
+        })
+      }, " Usuń ")];
     }),
     _: 1
     /* STABLE */
@@ -18296,10 +18326,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_layout, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Map, {
-        locations: $props.locations
+        locations: $props.locations,
+        onLocationsUpdatedParent: $options.refreshLocationsParent
       }, null, 8
       /* PROPS */
-      , ["locations"])])];
+      , ["locations", "onLocationsUpdatedParent"])])];
     }),
     _: 1
     /* STABLE */
@@ -19799,10 +19830,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.popupDisplayed]]), this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
     key: 0,
-    latlng: this.addLatLng
+    latlng: this.addLatLng,
+    onCanceled: $options.hideAddMarkerForm,
+    onLocationsUpdated: $options.refreshLocations
   }, null, 8
   /* PROPS */
-  , ["latlng"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
+  , ["latlng", "onCanceled", "onLocationsUpdated"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
   /* STABLE_FRAGMENT */
   );
 }

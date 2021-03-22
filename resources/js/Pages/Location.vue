@@ -4,10 +4,13 @@
             <strong>Title:</strong>
             <form @submit.prevent="changeTitle">
                 <input v-model="title" />
-                <button type="submit">Zmień</button>
+                <button class="btn" type="submit">Zmień</button>
             </form>
         </div>
         <div><strong>Description:</strong> {{ location.description }}</div>
+        <button class="btn btn-outline-danger btn-sm" @click="onDeleteLocation">
+            Usuń
+        </button>
     </layout>
 </template>
 
@@ -28,6 +31,11 @@ export default {
         changeTitle() {
             this.$inertia.put(`/locations/${this.location.id}`, {
                 title: this.title,
+            });
+        },
+        onDeleteLocation() {
+            this.$inertia.delete(`/locations/${this.location.id}`, {
+                id: this.location.id,
             });
         },
     },

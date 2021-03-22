@@ -53,6 +53,7 @@ class LocationController extends Controller
         $request->user()->locations()->create($request->all());
 
         return redirect('/locations')->with('success', 'Location updated');
+        // return back();
     }
 
     /**
@@ -103,8 +104,10 @@ class LocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Location $location)
     {
-        //
+        Location::find($location->id)->delete();
+
+        return redirect('/locations')->with('success', 'Location deleted');
     }
 }
