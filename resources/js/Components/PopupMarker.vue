@@ -8,25 +8,20 @@
 </template>
 
 <script>
+import { ref } from "vue";
 export default {
-    name: "PopupMarker",
-    data() {
-        return {
-            position: {
-                x: null,
-                y: null,
-            },
-            text: null,
+    setup() {
+        const position = ref({ x: null, y: null });
+        const text = ref("");
+
+        const setPositionContent = (x, y, locationText) => {
+            position.value.x = x;
+            position.value.y = y;
+            text.value = locationText;
         };
+
+        return { position, text, setPositionContent };
     },
-    methods: {
-        setPositionContent(x, y, text) {
-            this.position.x = x;
-            this.position.y = y;
-            this.text = text;
-        },
-    },
-    mounted() {},
 };
 </script>
 

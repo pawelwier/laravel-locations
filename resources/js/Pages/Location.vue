@@ -2,42 +2,39 @@
     <layout>
         <div class="title-container">
             <strong>Title:</strong>
-            <form @submit.prevent="changeTitle">
-                <input v-model="title" />
+            <form @submit.prevent="form.put(`/locations/${location.id}`)">
+                <input v-model="form.title" />
                 <button class="btn" type="submit">Zmień</button>
             </form>
         </div>
         <div><strong>Description:</strong> {{ location.description }}</div>
-        <button class="btn btn-outline-danger btn-sm" @click="onDeleteLocation">
-            Usuń
-        </button>
+        <form @submit.prevent="form.delete(`/locations/${location.id}`)">
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                Usuń
+            </button>
+        </form>
     </layout>
 </template>
 
 <script>
+import { ref, toRefs } from "vue";
+import { useForm } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 
 export default {
-    props: ["location"],
+    props: {
+        location: Object,
+    },
     components: {
         Layout,
     },
-    data() {
-        return {
-            title: this.location.title,
-        };
-    },
-    methods: {
-        changeTitle() {
-            this.$inertia.put(`/locations/${this.location.id}`, {
-                title: this.title,
-            });
-        },
-        onDeleteLocation() {
-            this.$inertia.delete(`/locations/${this.location.id}`, {
-                id: this.location.id,
-            });
-        },
+    setup(props) {
+        const { location } = toRefs(props);
+        const form = useForm({
+            title: location.value.title,
+        });
+
+        return { form };
     },
 };
 </script>

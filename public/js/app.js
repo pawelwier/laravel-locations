@@ -12950,7 +12950,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       user_info: user_info
     };
   },
-  name: "CreateLocationForm",
   props: {
     latlng: {
       longitude: null,
@@ -12996,25 +12995,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "PopupMarker",
-  data: function data() {
-    return {
-      position: {
-        x: null,
-        y: null
-      },
-      text: null
+  setup: function setup() {
+    var position = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)({
+      x: null,
+      y: null
+    });
+    var text = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("");
+
+    var setPositionContent = function setPositionContent(x, y, locationText) {
+      position.value.x = x;
+      position.value.y = y;
+      text.value = locationText;
     };
-  },
-  methods: {
-    setPositionContent: function setPositionContent(x, y, text) {
-      this.position.x = x;
-      this.position.y = y;
-      this.text = text;
-    }
-  },
-  mounted: function mounted() {}
+
+    return {
+      position: position,
+      text: text,
+      setPositionContent: setPositionContent
+    };
+  }
 });
 
 /***/ }),
@@ -14335,29 +14337,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["location"],
+  props: {
+    location: Object
+  },
   components: {
-    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__.default
+    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_2__.default
   },
-  data: function data() {
+  setup: function setup(props) {
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRefs)(props),
+        location = _toRefs.location;
+
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
+      title: location.value.title
+    });
     return {
-      title: this.location.title
+      form: form
     };
-  },
-  methods: {
-    changeTitle: function changeTitle() {
-      this.$inertia.put("/locations/".concat(this.location.id), {
-        title: this.title
-      });
-    },
-    onDeleteLocation: function onDeleteLocation() {
-      this.$inertia["delete"]("/locations/".concat(this.location.id), {
-        id: this.location.id
-      });
-    }
   }
 });
 
@@ -14374,25 +14376,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
-/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
-/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
-
+/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
+// import { Inertia } from "@inertiajs/inertia";
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["locations"],
-  components: {
-    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__.default,
-    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_2__.default
+  props: {
+    locations: Array
   },
-  methods: {
-    refreshLocationsParent: function refreshLocationsParent() {
-      console.log(123456);
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia.reload({
-        only: ["locations"]
-      });
-    }
+  components: {
+    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__.default,
+    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_1__.default
+  },
+  setup: function setup() {
+    var refreshLocations = function refreshLocations() {
+      console.log("dodane"); // Inertia.reload({ only: ["locations"] });
+    };
+
+    return {
+      refreshLocations: refreshLocations
+    };
   }
 });
 
@@ -15000,8 +15004,7 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     refreshLocations: function refreshLocations() {
-      this.$emit("locations-updated-parent");
-      console.log(this.locations);
+      this.$emit("locations-updated"); // console.log(this.locations);
     }
   },
   mounted: function mounted() {
@@ -15108,10 +15111,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
     "class": "popup-marker",
     style: {
-      top: $data.position.y + 'px',
-      left: $data.position.x + 'px'
+      top: $setup.position.y + 'px',
+      left: $setup.position.x + 'px'
     }
-  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.text), 5
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.text), 5
   /* TEXT, STYLE */
   );
 }
@@ -18268,31 +18271,39 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 /* HOISTED */
 );
 
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  type: "submit",
+  "class": "btn btn-outline-danger btn-sm"
+}, " Usuń ", -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("layout");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_layout, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-        onSubmit: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
-          return $options.changeTitle && $options.changeTitle.apply($options, arguments);
+        onSubmit: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+          return $setup.form.put("/locations/".concat($props.location.id));
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
         "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-          return $data.title = $event;
+          return $setup.form.title = $event;
         })
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), _hoisted_3], 32
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.title]]), _hoisted_3], 32
       /* HYDRATE_EVENTS */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.location.description), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        "class": "btn btn-outline-danger btn-sm",
-        onClick: _cache[3] || (_cache[3] = function () {
-          return $options.onDeleteLocation && $options.onDeleteLocation.apply($options, arguments);
-        })
-      }, " Usuń ")];
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
+        onSubmit: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+          return $setup.form["delete"]("/locations/".concat($props.location.id));
+        }, ["prevent"]))
+      }, [_hoisted_5], 32
+      /* HYDRATE_EVENTS */
+      )];
     }),
     _: 1
     /* STABLE */
@@ -18327,10 +18338,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Map, {
         locations: $props.locations,
-        onLocationsUpdatedParent: $options.refreshLocationsParent
+        onLocationsUpdated: $setup.refreshLocations
       }, null, 8
       /* PROPS */
-      , ["locations", "onLocationsUpdatedParent"])])];
+      , ["locations", "onLocationsUpdated"])])];
     }),
     _: 1
     /* STABLE */

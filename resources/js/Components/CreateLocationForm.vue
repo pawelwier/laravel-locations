@@ -16,7 +16,6 @@ export default {
         const user_info = computed(() => usePage().props.value.user_info);
         return { user_info };
     },
-    name: "CreateLocationForm",
     props: {
         latlng: {
             longitude: null,

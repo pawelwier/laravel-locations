@@ -61,8 +61,8 @@ export default {
             };
         },
         refreshLocations() {
-            this.$emit("locations-updated-parent");
-            console.log(this.locations);
+            this.$emit("locations-updated");
+            // console.log(this.locations);
         },
     },
     mounted() {
