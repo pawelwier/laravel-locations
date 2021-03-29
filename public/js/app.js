@@ -14959,7 +14959,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
 /* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
 
@@ -14975,59 +14975,75 @@ __webpack_require__.r(__webpack_exports__);
     locations: Array
   },
   emits: ["locations-updated"],
-  data: function data() {
-    return {
-      accessToken: "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q",
-      popupDisplayed: false,
-      showAddMarkerForm: false,
-      addLatLng: {
-        longitude: null,
-        latitude: null
-      }
+  setup: function setup(props, context) {
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_1__.toRefs)(props),
+        locations = _toRefs.locations;
+
+    var accessToken = "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q";
+    var popupDisplayed = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
+    var showAddMarkerForm = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
+    var popupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
+    var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)({
+      longitude: null,
+      latitude: null
+    });
+
+    var displayPopup = function displayPopup(e, text) {
+      popupMarker.value.setPositionContent(e.containerPoint.x, e.containerPoint.y, text);
+      popupDisplayed.value = true;
     };
-  },
-  methods: {
-    displayPopup: function displayPopup(e, text) {
-      this.$refs.popupMarker.setPositionContent(e.containerPoint.x, e.containerPoint.y, text);
-      this.popupDisplayed = true;
-    },
-    displayAddMarkerForm: function displayAddMarkerForm() {
-      this.showAddMarkerForm = true;
-    },
-    hideAddMarkerForm: function hideAddMarkerForm() {
-      this.showAddMarkerForm = false;
-    },
-    onAddNewLocation: function onAddNewLocation(e) {
-      this.displayAddMarkerForm();
-      this.addLatLng = {
+
+    var onAddNewLocation = function onAddNewLocation(e) {
+      displayAddMarkerForm();
+      addLatLng.value = {
         longitude: e.latlng.lng,
         latitude: e.latlng.lat
       };
-    },
-    refreshLocations: function refreshLocations() {
-      this.$emit("locations-updated"); // console.log(this.locations);
-    }
-  },
-  mounted: function mounted() {
-    var _this = this;
+    };
 
-    var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", this.onAddNewLocation).on("click", this.hideAddMarkerForm);
-    leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-      maxZoom: 18,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      accessToken: this.accessToken
-    }).addTo(map);
-    this.locations.map(function (location) {
-      return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude]).addTo(map).on("click", function () {
-        _this.$inertia.get("/locations/".concat(location.id));
-      }).on("mouseover", function (e) {
-        return _this.displayPopup(e, location.title);
-      }).on("mouseout", function () {
-        return _this.popupDisplayed = false;
+    var refreshLocations = function refreshLocations() {
+      context.emit("locations-updated");
+    };
+
+    var displayAddMarkerForm = function displayAddMarkerForm() {
+      showAddMarkerForm.value = true;
+    };
+
+    var hideAddMarkerForm = function hideAddMarkerForm() {
+      showAddMarkerForm.value = false;
+    };
+
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
+      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
+      leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        maxZoom: 18,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: accessToken
+      }).addTo(map);
+      locations.value.map(function (location) {
+        return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude]).addTo(map).on("click", function () {
+          // this.$inertia.get(`/locations/${location.id}`);
+          window.location.href = "/locations/".concat(location.id);
+        }).on("mouseover", function (e) {
+          return displayPopup(e, location.title);
+        }).on("mouseout", function () {
+          return popupDisplayed.value = false;
+        });
       });
     });
+    return {
+      popupDisplayed: popupDisplayed,
+      showAddMarkerForm: showAddMarkerForm,
+      accessToken: accessToken,
+      displayAddMarkerForm: displayAddMarkerForm,
+      hideAddMarkerForm: hideAddMarkerForm,
+      onAddNewLocation: onAddNewLocation,
+      refreshLocations: refreshLocations,
+      addLatLng: addLatLng,
+      popupMarker: popupMarker
+    };
   }
 });
 
@@ -19829,21 +19845,21 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 );
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_popup_marker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("popup-marker");
+  var _component_PopupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PopupMarker");
 
   var _component_create_location_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("create-location-form");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_popup_marker, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
     ref: "popupMarker"
   }, null, 512
   /* NEED_PATCH */
   )], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.popupDisplayed]]), this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
     key: 0,
     latlng: this.addLatLng,
-    onCanceled: $options.hideAddMarkerForm,
-    onLocationsUpdated: $options.refreshLocations
+    onCanceled: $setup.hideAddMarkerForm,
+    onLocationsUpdated: $setup.refreshLocations
   }, null, 8
   /* PROPS */
   , ["latlng", "onCanceled", "onLocationsUpdated"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
