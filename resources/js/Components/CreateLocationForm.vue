@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="addLocation">
+    <form @submit.prevent="onLocationsUpdated">
         Title: <input v-model="form.title" /><br />
         Description: <input v-model="form.description" /><br />
         <button class="btn" @click="onCancel">Anuluj</button>
@@ -8,44 +8,40 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { computed, toRefs } from "vue";
+import { usePage, useForm } from "@inertiajs/inertia-vue3";
 
 export default {
-    setup() {
-        const user_info = computed(() => usePage().props.value.user_info);
-        return { user_info };
-    },
     props: {
         latlng: {
             longitude: null,
             latitude: null,
         },
     },
-    data() {
-        return {
-            form: {
-                longitude: null,
-                latitude: null,
-                title: null,
-                description: null,
-                user_id: null,
-            },
+    emits: ["locations-updated", "canceled"],
+    setup(props, context) {
+        const userInfo = computed(() => usePage().props.value.user_info);
+
+        const { latlng } = toRefs(props);
+
+        const form = useForm({
+            longitude: latlng.value.longitude,
+            latitude: latlng.value.latitude,
+            user_id: userInfo.value.id,
+            title: null,
+            description: null,
+        });
+
+        const onLocationsUpdated = () => {
+            form.value.post("/locations");
+            context.emit("locations-updated");
         };
-    },
-    methods: {
-        addLocation() {
-            this.$inertia.post("/locations", {
-                ...this.form,
-                longitude: this.latlng.longitude,
-                latitude: this.latlng.latitude,
-                user_id: this.user_info.id,
-            });
-            this.$emit("locations-updated");
-        },
-        onCancel() {
-            this.$emit("canceled");
-        },
+
+        const onCancel = () => {
+            context.emit("canceled");
+        };
+
+        return { userInfo, form, onLocationsUpdated, onCancel };
     },
 };
 </script>

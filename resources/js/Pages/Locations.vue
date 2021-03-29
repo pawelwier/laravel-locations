@@ -26,6 +26,9 @@ export default {
         const refreshLocations = () => {
             console.log("dodane");
             // Inertia.reload({ only: ["locations"] });
+            // Inertia.visit("/locations", {
+            //     // only: ["locations"],
+            // });
         };
 
         return { refreshLocations };

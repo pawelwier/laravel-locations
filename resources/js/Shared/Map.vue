@@ -18,12 +18,12 @@ import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
 
 export default {
-    name: "Map",
     components: {
         PopupMarker,
         CreateLocationForm,
     },
     props: { locations: Array },
+    emits: ["locations-updated"],
     data() {
         return {
             accessToken: process.env.MIX_MAP_TOKEN,

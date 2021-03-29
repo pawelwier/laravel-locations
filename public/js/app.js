@@ -12933,52 +12933,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  setup: function setup() {
-    var user_info = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
-      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user_info;
-    });
-    return {
-      user_info: user_info
-    };
-  },
   props: {
     latlng: {
       longitude: null,
       latitude: null
     }
   },
-  data: function data() {
-    return {
-      form: {
-        longitude: null,
-        latitude: null,
-        title: null,
-        description: null,
-        user_id: null
-      }
+  emits: ["locations-updated", "canceled"],
+  setup: function setup(props, context) {
+    var userInfo = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
+      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user_info;
+    });
+
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRefs)(props),
+        latlng = _toRefs.latlng;
+
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
+      longitude: latlng.value.longitude,
+      latitude: latlng.value.latitude,
+      user_id: userInfo.value.id,
+      title: null,
+      description: null
+    });
+
+    var onLocationsUpdated = function onLocationsUpdated() {
+      form.value.post("/locations");
+      context.emit("locations-updated");
     };
-  },
-  methods: {
-    addLocation: function addLocation() {
-      this.$inertia.post("/locations", _objectSpread(_objectSpread({}, this.form), {}, {
-        longitude: this.latlng.longitude,
-        latitude: this.latlng.latitude,
-        user_id: this.user_info.id
-      }));
-      this.$emit("locations-updated");
-    },
-    onCancel: function onCancel() {
-      this.$emit("canceled");
-    }
+
+    var onCancel = function onCancel() {
+      context.emit("canceled");
+    };
+
+    return {
+      userInfo: userInfo,
+      form: form,
+      onLocationsUpdated: onLocationsUpdated,
+      onCancel: onCancel
+    };
   }
 });
 
@@ -14392,6 +14387,9 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup() {
     var refreshLocations = function refreshLocations() {
       console.log("dodane"); // Inertia.reload({ only: ["locations"] });
+      // Inertia.visit("/locations", {
+      //     // only: ["locations"],
+      // });
     };
 
     return {
@@ -14932,14 +14930,17 @@ __webpack_require__.r(__webpack_exports__);
     var user_info = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
       return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user_info;
     });
-    return {
-      user_info: user_info
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)();
+
+    var logout = function logout() {
+      form.value.post(route("logout"));
     };
-  },
-  methods: {
-    logout: function logout() {
-      this.$inertia.post(route("logout"));
-    }
+
+    return {
+      user_info: user_info,
+      form: form,
+      logout: logout
+    };
   }
 });
 
@@ -14966,7 +14967,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Map",
   components: {
     PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__.default,
     CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__.default
@@ -14974,6 +14974,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     locations: Array
   },
+  emits: ["locations-updated"],
   data: function data() {
     return {
       accessToken: "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q",
@@ -15068,24 +15069,24 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("form", {
     onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
-      return $options.addLocation && $options.addLocation.apply($options, arguments);
+      return $setup.onLocationsUpdated && $setup.onLocationsUpdated.apply($setup, arguments);
     }, ["prevent"]))
   }, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.form.title = $event;
+      return $setup.form.title = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.title]]), _hoisted_2, _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.title]]), _hoisted_2, _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-      return $data.form.description = $event;
+      return $setup.form.description = $event;
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.description]]), _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.description]]), _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
     "class": "btn",
     onClick: _cache[3] || (_cache[3] = function () {
-      return $options.onCancel && $options.onCancel.apply($options, arguments);
+      return $setup.onCancel && $setup.onCancel.apply($setup, arguments);
     })
   }, "Anuluj"), _hoisted_5], 32
   /* HYDRATE_EVENTS */
@@ -19766,13 +19767,19 @@ var _hoisted_1 = {
 var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Locations");
 
 var _hoisted_3 = {
-  key: 0
+  key: 0,
+  "class": "user-info"
 };
 var _hoisted_4 = {
   "class": "navbar-brand"
 };
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Logout");
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+  type: "submit",
+  "class": "btn btn-outline"
+}, " Logout ", -1
+/* HOISTED */
+);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_inertia_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("inertia-link");
@@ -19789,20 +19796,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }), $setup.user_info ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.user_info.name), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: "",
-    "class": "navbar-brand",
-    onClick: $options.logout
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_5];
-    }),
-    _: 1
-    /* STABLE */
-
-  }, 8
-  /* PROPS */
-  , ["onClick"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("article", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")])]);
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
+    onSubmit: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $setup.logout && $setup.logout.apply($setup, arguments);
+    }, ["prevent"]))
+  }, [_hoisted_5], 32
+  /* HYDRATE_EVENTS */
+  )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("article", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default")])]);
 }
 
 /***/ }),
@@ -20059,7 +20059,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.navbar-main {\n    position: -webkit-sticky;\n    position: sticky;\n    top: 0;\n    z-index: 1;\n    display: flex;\n    justify-content: space-between;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.navbar-main {\n    position: -webkit-sticky;\n    position: sticky;\n    top: 0;\n    z-index: 1;\n    display: flex;\n    justify-content: space-between;\n}\n.user-info {\n    display: flex;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
