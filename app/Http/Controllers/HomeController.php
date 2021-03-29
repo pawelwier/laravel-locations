@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use App\Models\Location;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,6 +29,10 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        return Inertia::render('Dashboard');
+        $user = Auth::user();
+
+        return Inertia::render('Dashboard', [
+            'locations' => Location::where('user_id', $user->id)->get()
+        ]);
     }
 }

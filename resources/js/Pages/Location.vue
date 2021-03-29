@@ -1,18 +1,34 @@
 <template>
     <layout>
         <div class="title-container">
-            <strong>Title:</strong>
             <form @submit.prevent="form.put(`/locations/${location.id}`)">
+                <strong>Title:</strong>
                 <input v-model="form.title" />
-                <button class="btn" type="submit">Zmień</button>
+                <div>
+                    <div><strong>Description:</strong></div>
+                    <textarea v-model="form.description" />
+                </div>
+                <button class="btn btn-outline-success" type="submit">
+                    Save
+                </button>
             </form>
         </div>
-        <div><strong>Description:</strong> {{ location.description }}</div>
+
         <form @submit.prevent="form.delete(`/locations/${location.id}`)">
             <button type="submit" class="btn btn-outline-danger btn-sm">
-                Usuń
+                Delete
             </button>
         </form>
+        <div>
+            <inertia-link class="navbar-brand" href="/dashboard"
+                >Dashboard</inertia-link
+            >
+        </div>
+        <div>
+            <inertia-link class="navbar-brand" href="/locations"
+                >Locations</inertia-link
+            >
+        </div>
     </layout>
 </template>
 
@@ -32,6 +48,7 @@ export default {
         const { location } = toRefs(props);
         const form = useForm({
             title: location.value.title,
+            description: location.value.description,
         });
 
         return { form };
@@ -40,6 +57,9 @@ export default {
 </script>
 
 <style>
+textarea {
+    width: 100%;
+}
 .title-container {
     display: flex;
 }
