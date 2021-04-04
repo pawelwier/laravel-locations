@@ -27,7 +27,7 @@ export default {
 
         const form = useForm();
         const logout = () => {
-            form.value.post(route("logout"));
+            form.post(route("logout"));
         };
 
         return { userInfo, form, logout };

@@ -14411,20 +14411,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
-/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
-// import { Inertia } from "@inertiajs/inertia";
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+/* harmony import */ var _Shared_Map__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Shared/Map */ "./resources/js/Shared/Map.vue");
+ // import { Inertia } from "@inertiajs/inertia";
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    locations: Array
+    locations: Array,
+    selectedId: Number
   },
   components: {
-    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_0__.default,
-    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_1__.default
+    Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__.default,
+    Map: _Shared_Map__WEBPACK_IMPORTED_MODULE_2__.default
   },
   setup: function setup() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var selectedId = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(urlParams.get("id"));
+
     var refreshLocations = function refreshLocations() {
       console.log("dodane"); // Inertia.reload({ only: ["locations"] });
       // Inertia.visit("/locations", {
@@ -14433,7 +14439,8 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     return {
-      refreshLocations: refreshLocations
+      refreshLocations: refreshLocations,
+      selectedId: selectedId
     };
   }
 });
@@ -14973,7 +14980,7 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)();
 
     var logout = function logout() {
-      form.value.post(route("logout"));
+      form.post(route("logout"));
     };
 
     return {
@@ -14999,31 +15006,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
-/* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
+/* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
+
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_2__.default,
-    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_3__.default
+    PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__.default,
+    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__.default
   },
   props: {
-    locations: Array
+    locations: Array,
+    selectedId: Number
   },
   emits: ["locations-updated"],
   setup: function setup(props, context) {
-    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_1__.toRefs)(props),
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
         locations = _toRefs.locations;
 
+    var _toRefs2 = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
+        selectedId = _toRefs2.selectedId;
+
     var accessToken = "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q";
-    var popupDisplayed = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
-    var showAddMarkerForm = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(false);
-    var popupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
-    var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)({
+    var popupDisplayed = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
+    var showAddMarkerForm = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
+    var popupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)({
       longitude: null,
       latitude: null
     });
@@ -15053,7 +15066,7 @@ __webpack_require__.r(__webpack_exports__);
       showAddMarkerForm.value = false;
     };
 
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
       var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
       leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         maxZoom: 18,
@@ -15062,10 +15075,16 @@ __webpack_require__.r(__webpack_exports__);
         zoomOffset: -1,
         accessToken: accessToken
       }).addTo(map);
+      var selectedIcon = leaflet__WEBPACK_IMPORTED_MODULE_0__.icon({
+        iconUrl: "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
+        iconSize: [40, 40],
+        iconAnchor: [17, 39]
+      });
       locations.value.map(function (location) {
-        return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude]).addTo(map).on("click", function () {
-          // this.$inertia.get(`/locations/${location.id}`);
-          window.location.href = "/locations/".concat(location.id);
+        return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude], selectedId.value && selectedId.value == location.id ? {
+          icon: selectedIcon
+        } : null).addTo(map).on("click", function () {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(location.id));
         }).on("mouseover", function (e) {
           return displayPopup(e, location.title);
         }).on("mouseout", function () {
@@ -18386,16 +18405,18 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 /* HOISTED */
 );
 
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Show on map");
+
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
   type: "submit",
   "class": "btn btn-outline-danger btn-sm"
 }, " Delete ", -1
 /* HOISTED */
 );
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dashboard");
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Dashboard");
 
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Locations");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Locations");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_inertia_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("inertia-link");
@@ -18422,18 +18443,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.description]])]), _hoisted_4], 32
       /* HYDRATE_EVENTS */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
+        "class": "btn btn-outline-info btn-sm",
+        href: "/locations",
+        data: {
+          id: $props.location.id
+        }
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+          return [_hoisted_5];
+        }),
+        _: 1
+        /* STABLE */
+
+      }, 8
+      /* PROPS */
+      , ["data"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
         onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $setup.form["delete"]("/locations/".concat($props.location.id));
         }, ["prevent"]))
-      }, [_hoisted_5], 32
+      }, [_hoisted_6], 32
       /* HYDRATE_EVENTS */
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
         "class": "navbar-brand",
         href: "/dashboard"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_6];
+          return [_hoisted_7];
         }),
         _: 1
         /* STABLE */
@@ -18443,7 +18479,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         href: "/locations"
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_7];
+          return [_hoisted_8];
         }),
         _: 1
         /* STABLE */
@@ -18474,6 +18510,13 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "main-wrapper"
 };
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+  "class": "add-location-info"
+}, "(right click to add new location)", -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Map = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Map");
 
@@ -18483,10 +18526,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Map, {
         locations: $props.locations,
+        selectedId: $setup.selectedId,
         onLocationsUpdated: $setup.refreshLocations
       }, null, 8
       /* PROPS */
-      , ["locations", "onLocationsUpdated"])])];
+      , ["locations", "selectedId", "onLocationsUpdated"])]), _hoisted_2];
     }),
     _: 1
     /* STABLE */
@@ -20155,7 +20199,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.main-wrapper {\n    display: flex;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.main-wrapper {\n    display: flex;\n}\n.add-location-info {\n    padding: 0.5rem 0 0 3rem;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -20227,7 +20271,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

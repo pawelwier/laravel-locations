@@ -13,6 +13,7 @@
 
 <script>
 import * as L from "leaflet";
+import { Inertia } from "@inertiajs/inertia";
 import { onMounted, ref, toRefs } from "vue";
 import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
@@ -22,10 +23,11 @@ export default {
         PopupMarker,
         CreateLocationForm,
     },
-    props: { locations: Array },
+    props: { locations: Array, selectedId: Number },
     emits: ["locations-updated"],
     setup(props, context) {
         const { locations } = toRefs(props);
+        const { selectedId } = toRefs(props);
 
         const accessToken = process.env.MIX_MAP_TOKEN;
         const popupDisplayed = ref(false);
@@ -83,12 +85,24 @@ export default {
                 }
             ).addTo(map);
 
+            const selectedIcon = L.icon({
+                iconUrl:
+                    "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
+                iconSize: [40, 40],
+                iconAnchor: [17, 39],
+            });
             locations.value.map((location) =>
-                L.marker([location.latitude, location.longitude])
+                L.marker(
+                    [location.latitude, location.longitude],
+                    selectedId.value && selectedId.value == location.id
+                        ? {
+                              icon: selectedIcon,
+                          }
+                        : null
+                )
                     .addTo(map)
                     .on("click", () => {
-                        // this.$inertia.get(`/locations/${location.id}`);
-                        window.location.href = `/locations/${location.id}`;
+                        Inertia.visit(`/locations/${location.id}`);
                     })
                     .on("mouseover", (e) => displayPopup(e, location.title))
                     .on("mouseout", () => (popupDisplayed.value = false))
@@ -120,5 +134,9 @@ export default {
     position: absolute;
     top: 140px;
     z-index: 9999;
+}
+
+.leaflet-grab {
+    cursor: default;
 }
 </style>

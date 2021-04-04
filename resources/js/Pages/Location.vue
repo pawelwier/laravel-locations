@@ -14,6 +14,14 @@
             </form>
         </div>
 
+        <div>
+            <inertia-link
+                class="btn btn-outline-info btn-sm"
+                href="/locations"
+                :data="{ id: location.id }"
+                >Show on map</inertia-link
+            >
+        </div>
         <form @submit.prevent="form.delete(`/locations/${location.id}`)">
             <button type="submit" class="btn btn-outline-danger btn-sm">
                 Delete
