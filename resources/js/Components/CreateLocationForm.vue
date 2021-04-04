@@ -2,8 +2,8 @@
     <form @submit.prevent="onLocationsUpdated">
         Title: <input v-model="form.title" /><br />
         Description: <input v-model="form.description" /><br />
-        <button class="btn" @click="onCancel">Anuluj</button>
-        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <button class="btn" @click="onCancel">Cancel</button>
+        <button class="btn btn-primary" type="submit">Add</button>
     </form>
 </template>
 
@@ -33,7 +33,7 @@ export default {
         });
 
         const onLocationsUpdated = () => {
-            form.value.post("/locations");
+            form.post("/locations");
             context.emit("locations-updated");
         };
 
