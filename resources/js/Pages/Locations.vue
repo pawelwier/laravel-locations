@@ -5,9 +5,13 @@
                 :locations="locations"
                 :selectedId="selectedId"
                 @locations-updated="refreshLocations"
+                @instruction-text-updated="updateInstructionText"
             ></Map>
         </div>
-        <div class="add-location-info">(right click to add new location)</div>
+        <div class="add-location-info">
+            Right click on the map to add location.<br />
+            {{ instructionText }}
+        </div>
     </layout>
 </template>
 
@@ -29,6 +33,7 @@ export default {
     setup() {
         const urlParams = new URLSearchParams(window.location.search);
         const selectedId = ref(urlParams.get("id"));
+        const instructionText = ref("");
 
         const refreshLocations = () => {
             console.log("dodane");
@@ -38,7 +43,21 @@ export default {
             // });
         };
 
-        return { refreshLocations, selectedId };
+        const updateInstructionText = (e) => {
+            instructionText.value =
+                e.target.value === "displayLocationDetails"
+                    ? "Click on a marker to show details"
+                    : e.target.value === "calculateDistance"
+                    ? "Select two points"
+                    : "";
+        };
+
+        return {
+            refreshLocations,
+            selectedId,
+            updateInstructionText,
+            instructionText,
+        };
     },
 };
 </script>

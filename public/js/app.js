@@ -13016,6 +13016,33 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js ***!
+  \********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {},
+  emits: ["type-updated"],
+  setup: function setup(_, context) {
+    var onTypeChanged = function onTypeChanged(e) {
+      context.emit("type-updated", e);
+    };
+
+    return {
+      onTypeChanged: onTypeChanged
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Jetstream/ActionMessage.vue?vue&type=script&lang=js":
 /*!******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Jetstream/ActionMessage.vue?vue&type=script&lang=js ***!
@@ -14430,6 +14457,7 @@ __webpack_require__.r(__webpack_exports__);
   setup: function setup() {
     var urlParams = new URLSearchParams(window.location.search);
     var selectedId = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(urlParams.get("id"));
+    var instructionText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("");
 
     var refreshLocations = function refreshLocations() {
       console.log("dodane"); // Inertia.reload({ only: ["locations"] });
@@ -14438,9 +14466,15 @@ __webpack_require__.r(__webpack_exports__);
       // });
     };
 
+    var updateInstructionText = function updateInstructionText(e) {
+      instructionText.value = e.target.value === "displayLocationDetails" ? "Click on a marker to show details" : e.target.value === "calculateDistance" ? "Select two points" : "";
+    };
+
     return {
       refreshLocations: refreshLocations,
-      selectedId: selectedId
+      selectedId: selectedId,
+      updateInstructionText: updateInstructionText,
+      instructionText: instructionText
     };
   }
 });
@@ -15010,6 +15044,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
 /* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
+/* harmony import */ var _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Components/SwitchModeForm */ "./resources/js/Components/SwitchModeForm.vue");
+
 
 
 
@@ -15018,24 +15054,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__.default,
-    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__.default
+    CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__.default,
+    SwitchModeForm: _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_5__.default
   },
   props: {
     locations: Array,
     selectedId: Number
   },
-  emits: ["locations-updated"],
+  emits: ["locations-updated", "instruction-text-updated"],
   setup: function setup(props, context) {
-    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
-        locations = _toRefs.locations;
-
-    var _toRefs2 = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
-        selectedId = _toRefs2.selectedId;
-
     var accessToken = "pk.eyJ1IjoicGF3ZWx3aWVyIiwiYSI6ImNrZHZqZXZxdDJqNzAyd3R2Y2N5bjFtcGoifQ.7PEYnuS1yokxBbRFsJlc4Q";
+
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
+        locations = _toRefs.locations,
+        selectedId = _toRefs.selectedId;
+
     var popupDisplayed = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var showAddMarkerForm = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var popupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    var distanceMarkerOne = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    var distanceMarkerTwo = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    var firstDistanceMarkerSelected = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
+    var distanceText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
+    var mode = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
     var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)({
       longitude: null,
       latitude: null
@@ -15066,6 +15107,56 @@ __webpack_require__.r(__webpack_exports__);
       showAddMarkerForm.value = false;
     };
 
+    var setDistanceMode = function setDistanceMode(text) {
+      mode.value = text;
+    };
+
+    var onTypeChanged = function onTypeChanged(e) {
+      setDistanceMode(e.target.value);
+      context.emit("instruction-text-updated", e);
+      distanceText.value = "";
+    }; // Method stolen from StackOverflow
+
+
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      var R = 6371; // Radius of the earth in km
+
+      var dLat = deg2rad(lat2 - lat1); // deg2rad below
+
+      var dLon = deg2rad(lon2 - lon1);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // Distance in km
+
+      return Math.floor(d);
+    } // Method stolen from StackOverflow
+
+
+    function deg2rad(deg) {
+      return deg * (Math.PI / 180);
+    }
+
+    var selectDistanceLocations = function selectDistanceLocations(location) {
+      if (!firstDistanceMarkerSelected.value) {
+        distanceMarkerOne.value = location;
+        firstDistanceMarkerSelected.value = true;
+        distanceText.value = "Distance from ".concat(location.title);
+      } else {
+        var _points$, _points$2, _points$3, _points$4;
+
+        distanceMarkerTwo.value = location;
+        firstDistanceMarkerSelected.value = false;
+        var points = [distanceMarkerOne.value, distanceMarkerTwo.value];
+
+        if (points[0].id === points[1].id) {
+          distanceText.value = "Select two different points";
+          return;
+        }
+
+        distanceText.value += " to ".concat(location.title, " equals ").concat(getDistanceFromLatLonInKm((_points$ = points[0]) === null || _points$ === void 0 ? void 0 : _points$.latitude, (_points$2 = points[0]) === null || _points$2 === void 0 ? void 0 : _points$2.longitude, (_points$3 = points[1]) === null || _points$3 === void 0 ? void 0 : _points$3.latitude, (_points$4 = points[1]) === null || _points$4 === void 0 ? void 0 : _points$4.longitude), "km");
+      }
+    };
+
     (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
       var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
       leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -15084,7 +15175,7 @@ __webpack_require__.r(__webpack_exports__);
         return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude], selectedId.value && selectedId.value == location.id ? {
           icon: selectedIcon
         } : null).addTo(map).on("click", function () {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(location.id));
+          mode.value === "calculateDistance" ? selectDistanceLocations(location) : mode.value === "displayLocationDetails" ? _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(location.id)) : "";
         }).on("mouseover", function (e) {
           return displayPopup(e, location.title);
         }).on("mouseout", function () {
@@ -15101,7 +15192,14 @@ __webpack_require__.r(__webpack_exports__);
       onAddNewLocation: onAddNewLocation,
       refreshLocations: refreshLocations,
       addLatLng: addLatLng,
-      popupMarker: popupMarker
+      popupMarker: popupMarker,
+      mode: mode,
+      setDistanceMode: setDistanceMode,
+      onTypeChanged: onTypeChanged,
+      distanceMarkerOne: distanceMarkerOne,
+      distanceMarkerTwo: distanceMarkerTwo,
+      firstDistanceMarkerSelected: firstDistanceMarkerSelected,
+      distanceText: distanceText
     };
   }
 });
@@ -15192,6 +15290,73 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.text), 5
   /* TEXT, STYLE */
+  );
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6":
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6 ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  type: "radio",
+  name: "type",
+  id: "details",
+  value: "displayLocationDetails"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "details"
+}, "Details", -1
+/* HOISTED */
+);
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("br", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  type: "radio",
+  name: "type",
+  id: "distance",
+  value: "calculateDistance"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "for": "distance"
+}, "Distance", -1
+/* HOISTED */
+);
+
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("br", null, null, -1
+/* HOISTED */
+);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("form", {
+    onSubmit: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+      return _ctx.console.log('ok');
+    }, ["prevent"])),
+    onChange: _cache[2] || (_cache[2] = function () {
+      return $setup.onTypeChanged && $setup.onTypeChanged.apply($setup, arguments);
+    })
+  }, [_hoisted_1, _hoisted_2, _hoisted_3, _hoisted_4, _hoisted_5, _hoisted_6], 32
+  /* HYDRATE_EVENTS */
   );
 }
 
@@ -18510,10 +18675,13 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "main-wrapper"
 };
-
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+var _hoisted_2 = {
   "class": "add-location-info"
-}, "(right click to add new location)", -1
+};
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Right click on the map to add location.");
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("br", null, null, -1
 /* HOISTED */
 );
 
@@ -18527,10 +18695,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Map, {
         locations: $props.locations,
         selectedId: $setup.selectedId,
-        onLocationsUpdated: $setup.refreshLocations
+        onLocationsUpdated: $setup.refreshLocations,
+        onInstructionTextUpdated: $setup.updateInstructionText
       }, null, 8
       /* PROPS */
-      , ["locations", "selectedId", "onLocationsUpdated"])]), _hoisted_2];
+      , ["locations", "selectedId", "onLocationsUpdated", "onInstructionTextUpdated"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [_hoisted_3, _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.instructionText), 1
+      /* TEXT */
+      )])];
     }),
     _: 1
     /* STABLE */
@@ -20016,10 +20187,18 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 /* HOISTED */
 );
 
+var _hoisted_2 = {
+  "class": "mode-switch"
+};
+var _hoisted_3 = {
+  key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PopupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PopupMarker");
 
   var _component_create_location_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("create-location-form");
+
+  var _component_switch_mode_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("switch-mode-form");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
     ref: "popupMarker"
@@ -20027,14 +20206,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
     key: 0,
     latlng: this.addLatLng,
     onCanceled: $setup.hideAddMarkerForm,
     onLocationsUpdated: $setup.refreshLocations
   }, null, 8
   /* PROPS */
-  , ["latlng", "onCanceled", "onLocationsUpdated"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
+  , ["latlng", "onCanceled", "onLocationsUpdated"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_switch_mode_form, {
+    onTypeUpdated: $setup.onTypeChanged
+  }, null, 8
+  /* PROPS */
+  , ["onTypeUpdated"]), $setup.distanceText ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.distanceText), 1
+  /* TEXT */
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -20271,7 +20456,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -55652,6 +55837,32 @@ _PopupMarker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.__
 
 /***/ }),
 
+/***/ "./resources/js/Components/SwitchModeForm.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/Components/SwitchModeForm.vue ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _SwitchModeForm_vue_vue_type_template_id_2ec10de6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SwitchModeForm.vue?vue&type=template&id=2ec10de6 */ "./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6");
+/* harmony import */ var _SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SwitchModeForm.vue?vue&type=script&lang=js */ "./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js");
+
+
+
+_SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.render = _SwitchModeForm_vue_vue_type_template_id_2ec10de6__WEBPACK_IMPORTED_MODULE_0__.render
+/* hot reload */
+if (false) {}
+
+_SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.__file = "resources/js/Components/SwitchModeForm.vue"
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default);
+
+/***/ }),
+
 /***/ "./resources/js/Jetstream/ActionMessage.vue":
 /*!**************************************************!*\
   !*** ./resources/js/Jetstream/ActionMessage.vue ***!
@@ -56993,6 +57204,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js":
+/*!****************************************************************************!*\
+  !*** ./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__.default)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SwitchModeForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./SwitchModeForm.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/Jetstream/ActionMessage.vue?vue&type=script&lang=js":
 /*!**************************************************************************!*\
   !*** ./resources/js/Jetstream/ActionMessage.vue?vue&type=script&lang=js ***!
@@ -57741,6 +57968,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PopupMarker_vue_vue_type_template_id_ad0e37ea__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PopupMarker_vue_vue_type_template_id_ad0e37ea__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PopupMarker.vue?vue&type=template&id=ad0e37ea */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/PopupMarker.vue?vue&type=template&id=ad0e37ea");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6 ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SwitchModeForm_vue_vue_type_template_id_2ec10de6__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_SwitchModeForm_vue_vue_type_template_id_2ec10de6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./SwitchModeForm.vue?vue&type=template&id=2ec10de6 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6");
 
 
 /***/ }),
