@@ -11,8 +11,8 @@
             @locations-updated="refreshLocations"
         ></create-location-form>
         <switch-mode-form @type-updated="onTypeChanged"></switch-mode-form>
-        <div v-if="distanceText">{{ distanceText }}</div>
     </div>
+    <div v-if="distanceText">{{ distanceText }}</div>
 </template>
 
 <script>
@@ -223,6 +223,7 @@ export default {
 }
 
 .mode-switch {
+    padding: 2rem 0;
     display: block;
 }
 </style>

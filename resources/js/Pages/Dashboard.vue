@@ -1,36 +1,53 @@
 <template>
     <layout>
-        <h2>Dashboard</h2>
-        <div>User info</div>
-        <ul>
-            <li>
-                ID: <strong>{{ userInfo.id }}</strong>
-            </li>
-            <li>
-                Name: <strong>{{ userInfo.name }}</strong>
-            </li>
-            <li>
-                Email: <strong>{{ userInfo.email }}</strong>
-            </li>
-            <li>
-                Joined:
-                <strong>{{
-                    new Date(userInfo.created_at).toLocaleString()
-                }}</strong>
-            </li>
-        </ul>
-        <div>
-            User's locations
-            <button class="btn btn-outline-info" @click="toggleShowLocations">
-                {{ toggleButtonText }}
-            </button>
-            <ul v-if="showAllLocations">
-                <li v-for="location in locations" :key="location.id">
-                    <inertia-link :href="`/locations/${location.id}`">{{
-                        location.title
-                    }}</inertia-link>
-                </li>
-            </ul>
+        <div class="p-3">
+            <h3>User info</h3>
+            <div class="mb-4">
+                <ul class="list-group">
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-start"
+                    >
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Name:</div>
+                            {{ userInfo.name }}
+                        </div>
+                    </li>
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-start"
+                    >
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Email:</div>
+                            {{ userInfo.email }}
+                        </div>
+                    </li>
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-start"
+                    >
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Joined:</div>
+                            {{ new Date(userInfo.created_at).toLocaleString() }}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <h3>User locations</h3>
+            <div>
+                <button
+                    class="btn btn-outline-info"
+                    @click="toggleShowLocations"
+                >
+                    {{ toggleButtonText }}
+                </button>
+                <div v-if="showAllLocations" class="list-group">
+                    <inertia-link
+                        v-for="location in locations"
+                        :key="location.id"
+                        class="list-group-item list-group-item-action"
+                        :href="`/locations/${location.id}`"
+                        >{{ location.title }}</inertia-link
+                    >
+                </div>
+            </div>
         </div>
     </layout>
 </template>
@@ -69,3 +86,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+h3 {
+    padding-top: 0.4 rem;
+}
+</style>

@@ -16,7 +16,7 @@ export default {
 
         const setPositionContent = (x, y, locationText) => {
             position.value.x = x;
-            position.value.y = y;
+            position.value.y = y + 85;
             text.value = locationText;
         };
 

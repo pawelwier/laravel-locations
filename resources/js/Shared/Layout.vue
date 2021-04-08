@@ -7,7 +7,7 @@
             <div class="user-info" v-if="userInfo">
                 <div class="navbar-brand">{{ userInfo.name }}</div>
                 <form @submit.prevent="logout">
-                    <button type="submit" class="btn btn-outline">
+                    <button type="submit" class="btn navbar-brand">
                         Logout
                     </button>
                 </form>
@@ -41,6 +41,12 @@ export default {
     z-index: 1;
     display: flex;
     justify-content: space-between;
+    padding-left: 2em;
+}
+
+.navbar-brand {
+    font-weight: 500;
+    font-size: 1.3rem;
 }
 
 .user-info {

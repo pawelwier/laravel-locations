@@ -1,47 +1,72 @@
 <template>
     <layout>
-        <div class="title-container">
-            <form @submit.prevent="form.put(`/locations/${location.id}`)">
-                <strong>Title:</strong>
-                <input v-model="form.title" />
-                <div>
-                    <div><strong>Description:</strong></div>
-                    <textarea v-model="form.description" />
+        <div class="form-container">
+            <form
+                class="mb-5"
+                @submit.prevent="form.put(`/locations/${location.id}`)"
+            >
+                <div class="input-group">
+                    <span class="input-group-text"
+                        ><strong>Title:</strong></span
+                    >
+                    <input
+                        type="text"
+                        v-model="form.title"
+                        class="form-control"
+                    />
                 </div>
-                <button class="btn btn-outline-success" type="submit">
-                    Save
-                </button>
+                <div class="input-group py-3">
+                    <span class="input-group-text"
+                        ><strong>Description:</strong></span
+                    >
+                    <textarea
+                        class="form-control"
+                        v-model="form.description"
+                        aria-label="Description"
+                    ></textarea>
+                </div>
+                <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic outlined example"
+                >
+                    <button class="btn btn-outline-success" type="submit">
+                        Save
+                    </button>
+                    <inertia-link
+                        class="btn btn-outline-info"
+                        href="/locations"
+                        :data="{ id: location.id }"
+                        >Show on map</inertia-link
+                    >
+                    <form
+                        class="delete-form"
+                        @submit.prevent="
+                            form.delete(`/locations/${location.id}`)
+                        "
+                    >
+                        <button type="submit" class="btn btn-outline-danger">
+                            Delete
+                        </button>
+                    </form>
+                </div>
             </form>
-        </div>
-
-        <div>
-            <inertia-link
-                class="btn btn-outline-info btn-sm"
-                href="/locations"
-                :data="{ id: location.id }"
-                >Show on map</inertia-link
-            >
-        </div>
-        <form @submit.prevent="form.delete(`/locations/${location.id}`)">
-            <button type="submit" class="btn btn-outline-danger btn-sm">
-                Delete
-            </button>
-        </form>
-        <div>
-            <inertia-link class="navbar-brand" href="/dashboard"
-                >Dashboard</inertia-link
-            >
-        </div>
-        <div>
-            <inertia-link class="navbar-brand" href="/locations"
-                >Locations</inertia-link
-            >
+            <div>
+                <inertia-link class="navbar-brand" href="/dashboard"
+                    >Dashboard</inertia-link
+                >
+            </div>
+            <div>
+                <inertia-link class="navbar-brand" href="/locations"
+                    >Locations</inertia-link
+                >
+            </div>
         </div>
     </layout>
 </template>
 
 <script>
-import { ref, toRefs } from "vue";
+import { _, toRefs } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
 
@@ -65,13 +90,11 @@ export default {
 </script>
 
 <style>
-textarea {
-    width: 100%;
+.form-container {
+    padding: 2rem;
 }
-.title-container {
-    display: flex;
-}
-.title-container input {
-    margin-left: 0.4em;
+
+.delete-form {
+    margin-left: 1rem;
 }
 </style>

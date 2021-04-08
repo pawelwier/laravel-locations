@@ -1,5 +1,9 @@
 <template>
-    <layout>
+    <layout
+        ><div class="add-location-info">
+            Right click on the map to add location<br />
+            {{ instructionText }}
+        </div>
         <div class="main-wrapper">
             <Map
                 :locations="locations"
@@ -7,10 +11,6 @@
                 @locations-updated="refreshLocations"
                 @instruction-text-updated="updateInstructionText"
             ></Map>
-        </div>
-        <div class="add-location-info">
-            Right click on the map to add location.<br />
-            {{ instructionText }}
         </div>
     </layout>
 </template>
@@ -33,7 +33,7 @@ export default {
     setup() {
         const urlParams = new URLSearchParams(window.location.search);
         const selectedId = ref(urlParams.get("id"));
-        const instructionText = ref("");
+        const instructionText = ref("Choose a mode");
 
         const refreshLocations = () => {
             console.log("dodane");
@@ -65,9 +65,14 @@ export default {
 <style>
 .main-wrapper {
     display: flex;
+    flex-direction: column;
+    padding: 2rem;
 }
 
 .add-location-info {
-    padding: 0.5rem 0 0 3rem;
+    padding: 0.5rem 0 0.5rem 2rem;
+    background-color: #e9ecef;
+    font-size: 1.2em;
+    font-weight: 500;
 }
 </style>
