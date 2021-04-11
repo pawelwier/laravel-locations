@@ -22,6 +22,7 @@ import { onMounted, ref, toRefs } from "vue";
 import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
 import SwitchModeForm from "../Components/SwitchModeForm";
+import { getDistanceFromLatLonInKm } from "../MapUtils";
 
 export default {
     components: {
@@ -85,32 +86,36 @@ export default {
             mode.value = text;
         };
 
-        const onTypeChanged = (e) => {
-            setDistanceMode(e.target.value);
-            context.emit("instruction-text-updated", e);
-            distanceText.value = "";
+        const goToLocation = (id) => {
+            Inertia.visit(`/locations/${id}`);
         };
 
-        // Method stolen from StackOverflow
-        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-            var R = 6371; // Radius of the earth in km
-            var dLat = deg2rad(lat2 - lat1); // deg2rad below
-            var dLon = deg2rad(lon2 - lon1);
-            var a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(deg2rad(lat1)) *
-                    Math.cos(deg2rad(lat2)) *
-                    Math.sin(dLon / 2) *
-                    Math.sin(dLon / 2);
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            var d = R * c; // Distance in km
-            return Math.floor(d);
-        }
+        const setOnclickFunctionality = (mode, location) => {
+            switch (mode) {
+                case "calculateDistance":
+                    return selectDistanceLocations(location);
+                case "displayLocationDetails":
+                    return goToLocation(location.id);
+            }
+        };
 
-        // Method stolen from StackOverflow
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
-        }
+        const setDisplayText = (eventValue) => {
+            switch (eventValue) {
+                case "displayLocationDetails":
+                    return "Click on a marker to show details";
+                case "calculateDistance":
+                    return "Select two markers";
+            }
+        };
+
+        const onTypeChanged = (e) => {
+            setDistanceMode(e.target.value);
+            context.emit(
+                "instruction-text-updated",
+                setDisplayText(e.target.value)
+            );
+            distanceText.value = "";
+        };
 
         const selectDistanceLocations = (location) => {
             if (!firstDistanceMarkerSelected.value) {
@@ -173,11 +178,7 @@ export default {
                 )
                     .addTo(map)
                     .on("click", () => {
-                        mode.value === "calculateDistance"
-                            ? selectDistanceLocations(location)
-                            : mode.value === "displayLocationDetails"
-                            ? Inertia.visit(`/locations/${location.id}`)
-                            : "";
+                        setOnclick(mode.value, location);
                     })
                     .on("mouseover", (e) => displayPopup(e, location.title))
                     .on("mouseout", () => (popupDisplayed.value = false))

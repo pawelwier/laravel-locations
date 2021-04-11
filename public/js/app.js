@@ -14466,8 +14466,8 @@ __webpack_require__.r(__webpack_exports__);
       // });
     };
 
-    var updateInstructionText = function updateInstructionText(e) {
-      instructionText.value = e.target.value === "displayLocationDetails" ? "Click on a marker to show details" : e.target.value === "calculateDistance" ? "Select two points" : "";
+    var updateInstructionText = function updateInstructionText(text) {
+      instructionText.value = text;
     };
 
     return {
@@ -15045,6 +15045,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
 /* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
 /* harmony import */ var _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Components/SwitchModeForm */ "./resources/js/Components/SwitchModeForm.vue");
+/* harmony import */ var _MapUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../MapUtils */ "./resources/js/MapUtils.js");
+
 
 
 
@@ -15111,30 +15113,35 @@ __webpack_require__.r(__webpack_exports__);
       mode.value = text;
     };
 
+    var goToLocation = function goToLocation(id) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(id));
+    };
+
+    var setOnclickFunctionality = function setOnclickFunctionality(mode, location) {
+      switch (mode) {
+        case "calculateDistance":
+          return selectDistanceLocations(location);
+
+        case "displayLocationDetails":
+          return goToLocation(location.id);
+      }
+    };
+
+    var setDisplayText = function setDisplayText(eventValue) {
+      switch (eventValue) {
+        case "displayLocationDetails":
+          return "Click on a marker to show details";
+
+        case "calculateDistance":
+          return "Select two markers";
+      }
+    };
+
     var onTypeChanged = function onTypeChanged(e) {
       setDistanceMode(e.target.value);
-      context.emit("instruction-text-updated", e);
+      context.emit("instruction-text-updated", setDisplayText(e.target.value));
       distanceText.value = "";
-    }; // Method stolen from StackOverflow
-
-
-    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-      var R = 6371; // Radius of the earth in km
-
-      var dLat = deg2rad(lat2 - lat1); // deg2rad below
-
-      var dLon = deg2rad(lon2 - lon1);
-      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      var d = R * c; // Distance in km
-
-      return Math.floor(d);
-    } // Method stolen from StackOverflow
-
-
-    function deg2rad(deg) {
-      return deg * (Math.PI / 180);
-    }
+    };
 
     var selectDistanceLocations = function selectDistanceLocations(location) {
       if (!firstDistanceMarkerSelected.value) {
@@ -15153,7 +15160,7 @@ __webpack_require__.r(__webpack_exports__);
           return;
         }
 
-        distanceText.value += " to ".concat(location.title, " equals ").concat(getDistanceFromLatLonInKm((_points$ = points[0]) === null || _points$ === void 0 ? void 0 : _points$.latitude, (_points$2 = points[0]) === null || _points$2 === void 0 ? void 0 : _points$2.longitude, (_points$3 = points[1]) === null || _points$3 === void 0 ? void 0 : _points$3.latitude, (_points$4 = points[1]) === null || _points$4 === void 0 ? void 0 : _points$4.longitude), "km");
+        distanceText.value += " to ".concat(location.title, " equals ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)((_points$ = points[0]) === null || _points$ === void 0 ? void 0 : _points$.latitude, (_points$2 = points[0]) === null || _points$2 === void 0 ? void 0 : _points$2.longitude, (_points$3 = points[1]) === null || _points$3 === void 0 ? void 0 : _points$3.latitude, (_points$4 = points[1]) === null || _points$4 === void 0 ? void 0 : _points$4.longitude), "km");
       }
     };
 
@@ -15175,7 +15182,7 @@ __webpack_require__.r(__webpack_exports__);
         return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude], selectedId.value && selectedId.value == location.id ? {
           icon: selectedIcon
         } : null).addTo(map).on("click", function () {
-          mode.value === "calculateDistance" ? selectDistanceLocations(location) : mode.value === "displayLocationDetails" ? _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(location.id)) : "";
+          setOnclick(mode.value, location);
         }).on("mouseover", function (e) {
           return displayPopup(e, location.title);
         }).on("mouseout", function () {
@@ -20283,6 +20290,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* STABLE_FRAGMENT */
   );
 }
+
+/***/ }),
+
+/***/ "./resources/js/MapUtils.js":
+/*!**********************************!*\
+  !*** ./resources/js/MapUtils.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getDistanceFromLatLonInKm": () => (/* binding */ getDistanceFromLatLonInKm)
+/* harmony export */ });
+// Method stolen from StackOverflow
+var getDistanceFromLatLonInKm = function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+
+  var dLat = deg2rad(lat2 - lat1); // deg2rad below
+
+  var dLon = deg2rad(lon2 - lon1);
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+
+  return Math.floor(d);
+}; // Method stolen from StackOverflow
+
+var deg2rad = function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+};
 
 /***/ }),
 

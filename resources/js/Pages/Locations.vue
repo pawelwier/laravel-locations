@@ -43,13 +43,8 @@ export default {
             // });
         };
 
-        const updateInstructionText = (e) => {
-            instructionText.value =
-                e.target.value === "displayLocationDetails"
-                    ? "Click on a marker to show details"
-                    : e.target.value === "calculateDistance"
-                    ? "Select two points"
-                    : "";
+        const updateInstructionText = (text) => {
+            instructionText.value = text;
         };
 
         return {
