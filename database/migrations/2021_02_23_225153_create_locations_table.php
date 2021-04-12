@@ -21,7 +21,7 @@ class CreateLocationsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->float('longitude');
             $table->float('latitude');
             $table->timestamps();
