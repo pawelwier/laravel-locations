@@ -14417,7 +14417,9 @@ __webpack_require__.r(__webpack_exports__);
 
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       title: location.value.title,
-      description: location.value.description
+      description: location.value.description,
+      latitude: location.value.latitude,
+      longitude: location.value.longitude
     });
     return {
       form: form
@@ -15117,7 +15119,7 @@ __webpack_require__.r(__webpack_exports__);
       _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.visit("/locations/".concat(id));
     };
 
-    var setOnclickFunctionality = function setOnclickFunctionality(mode, location) {
+    var setOnclick = function setOnclick(mode, location) {
       switch (mode) {
         case "calculateDistance":
           return selectDistanceLocations(location);

@@ -90,7 +90,7 @@ export default {
             Inertia.visit(`/locations/${id}`);
         };
 
-        const setOnclickFunctionality = (mode, location) => {
+        const setOnclick = (mode, location) => {
             switch (mode) {
                 case "calculateDistance":
                     return selectDistanceLocations(location);

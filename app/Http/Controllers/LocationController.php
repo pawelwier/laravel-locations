@@ -60,7 +60,7 @@ class LocationController extends Controller
 
     public function destroy(Location $location)
     {
-        Location::find($location->id)->delete();
+        $location->delete();
 
         return redirect('/locations')->with('success', 'Location deleted');
     }

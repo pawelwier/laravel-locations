@@ -82,6 +82,8 @@ export default {
         const form = useForm({
             title: location.value.title,
             description: location.value.description,
+            latitude: location.value.latitude,
+            longitude: location.value.longitude,
         });
 
         return { form };

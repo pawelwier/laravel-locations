@@ -26,11 +26,12 @@ class LocationsTest extends TestCase
             'longitude' => 10.22,
             'latitude' => 10.22,
         ];
-
-        $this->post(route('locations.store'), $request);
-
+        
+        $response = $this->post(route('locations.store'), $request);
+        
         $this->assertDatabaseHas('locations', $request);
         self::assertCount(1, $user->locations);
+        $response->assertStatus(302);
     }
 
     public function test_create_invalid_location()
@@ -49,7 +50,7 @@ class LocationsTest extends TestCase
         $response->assertRedirect();
     }
 
-    public function test_delete_location()
+    public function test_delete_unauthorized_location()
     {
         /** @var User $user */
         $user = User::factory()->create();
@@ -60,5 +61,47 @@ class LocationsTest extends TestCase
         $response = $this->delete(route('locations.destroy', $locations->first()->id));
 
         $response->assertStatus(403);
+    }
+
+    public function test_delete_location()
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $request = [
+            'title' => 'test',
+            'description' => 'test description',
+            'longitude' => 10.22,
+            'latitude' => 10.22,
+        ];
+        
+        $this->post(route('locations.store'), $request);
+        $this->post(route('locations.store'), $request);
+
+        $response = $this->delete(route('locations.destroy', $user->locations->first()));
+        
+        self::assertCount(1, $user->locations->fresh()->all());
+        $response->assertStatus(302);
+        $response->assertRedirect(route('locations.index'));
+    }
+
+    public function test_update_location_title_description()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $location = Location::factory()->create(['user_id' => $user->id]);
+        
+        $response = $this->put(route('locations.update', $location), [
+            'title' => 'updated title',
+            'description' => 'updated description',
+            'longitude' => $location->longitude,
+            'latitude' => $location->latitude
+        ]);
+
+        $response->assertStatus(302);
+        $this->assertEquals($location->fresh()->title, 'updated title');
+        $this->assertEquals($location->fresh()->description, 'updated description');
     }
 }
