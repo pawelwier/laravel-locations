@@ -48,6 +48,8 @@ export default {
 
         const mode = ref("");
 
+        const markerDraggable = ref(false);
+
         const addLatLng = ref({
             longitude: null,
             latitude: null,
@@ -92,10 +94,10 @@ export default {
 
         const setOnclick = (mode, location) => {
             switch (mode) {
-                case "calculateDistance":
-                    return selectDistanceLocations(location);
                 case "displayLocationDetails":
                     return goToLocation(location.id);
+                case "calculateDistance":
+                    return selectDistanceLocations(location);
             }
         };
 
@@ -105,6 +107,9 @@ export default {
                     return "Click on a marker to show details";
                 case "calculateDistance":
                     return "Select two markers";
+                case "moveMarker":
+                    markerDraggable.value = true;
+                    return "Drag a marker";
             }
         };
 
@@ -135,12 +140,7 @@ export default {
                 }
                 distanceText.value += ` to ${
                     location.title
-                } equals ${getDistanceFromLatLonInKm(
-                    points[0]?.latitude,
-                    points[0]?.longitude,
-                    points[1]?.latitude,
-                    points[1]?.longitude
-                )}km`;
+                } equals ${getDistanceFromLatLonInKm(points[0], points[1])}km`;
             }
         };
 
@@ -167,6 +167,7 @@ export default {
                 iconSize: [40, 40],
                 iconAnchor: [17, 39],
             });
+            console.log(markerDraggable.value);
             locations.value.map((location) =>
                 L.marker(
                     [location.latitude, location.longitude],
@@ -174,7 +175,9 @@ export default {
                         ? {
                               icon: selectedIcon,
                           }
-                        : null
+                        : {
+                              draggable: markerDraggable.value,
+                          }
                 )
                     .addTo(map)
                     .on("click", () => {
@@ -202,6 +205,7 @@ export default {
             distanceMarkerTwo,
             firstDistanceMarkerSelected,
             distanceText,
+            markerDraggable,
         };
     },
 };

@@ -15081,6 +15081,7 @@ __webpack_require__.r(__webpack_exports__);
     var firstDistanceMarkerSelected = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var distanceText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
     var mode = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
+    var markerDraggable = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)({
       longitude: null,
       latitude: null
@@ -15121,11 +15122,11 @@ __webpack_require__.r(__webpack_exports__);
 
     var setOnclick = function setOnclick(mode, location) {
       switch (mode) {
-        case "calculateDistance":
-          return selectDistanceLocations(location);
-
         case "displayLocationDetails":
           return goToLocation(location.id);
+
+        case "calculateDistance":
+          return selectDistanceLocations(location);
       }
     };
 
@@ -15136,6 +15137,10 @@ __webpack_require__.r(__webpack_exports__);
 
         case "calculateDistance":
           return "Select two markers";
+
+        case "moveMarker":
+          markerDraggable.value = true;
+          return "Drag a marker";
       }
     };
 
@@ -15151,8 +15156,6 @@ __webpack_require__.r(__webpack_exports__);
         firstDistanceMarkerSelected.value = true;
         distanceText.value = "Distance from ".concat(location.title);
       } else {
-        var _points$, _points$2, _points$3, _points$4;
-
         distanceMarkerTwo.value = location;
         firstDistanceMarkerSelected.value = false;
         var points = [distanceMarkerOne.value, distanceMarkerTwo.value];
@@ -15162,7 +15165,7 @@ __webpack_require__.r(__webpack_exports__);
           return;
         }
 
-        distanceText.value += " to ".concat(location.title, " equals ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)((_points$ = points[0]) === null || _points$ === void 0 ? void 0 : _points$.latitude, (_points$2 = points[0]) === null || _points$2 === void 0 ? void 0 : _points$2.longitude, (_points$3 = points[1]) === null || _points$3 === void 0 ? void 0 : _points$3.latitude, (_points$4 = points[1]) === null || _points$4 === void 0 ? void 0 : _points$4.longitude), "km");
+        distanceText.value += " to ".concat(location.title, " equals ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)(points[0], points[1]), "km");
       }
     };
 
@@ -15180,10 +15183,13 @@ __webpack_require__.r(__webpack_exports__);
         iconSize: [40, 40],
         iconAnchor: [17, 39]
       });
+      console.log(markerDraggable.value);
       locations.value.map(function (location) {
         return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude], selectedId.value && selectedId.value == location.id ? {
           icon: selectedIcon
-        } : null).addTo(map).on("click", function () {
+        } : {
+          draggable: markerDraggable.value
+        }).addTo(map).on("click", function () {
           setOnclick(mode.value, location);
         }).on("mouseover", function (e) {
           return displayPopup(e, location.title);
@@ -15208,7 +15214,8 @@ __webpack_require__.r(__webpack_exports__);
       distanceMarkerOne: distanceMarkerOne,
       distanceMarkerTwo: distanceMarkerTwo,
       firstDistanceMarkerSelected: firstDistanceMarkerSelected,
-      distanceText: distanceText
+      distanceText: distanceText,
+      markerDraggable: markerDraggable
     };
   }
 });
@@ -15346,7 +15353,16 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 }), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "class": "btn btn-outline-primary",
   "for": "distance"
-}, "Distance")], -1
+}, "Distance"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  "class": "btn-check",
+  type: "radio",
+  name: "type",
+  id: "move",
+  value: "moveMarker"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "class": "btn btn-outline-primary",
+  "for": "move"
+}, "Move marker")], -1
 /* HOISTED */
 );
 
@@ -20307,7 +20323,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getDistanceFromLatLonInKm": () => (/* binding */ getDistanceFromLatLonInKm)
 /* harmony export */ });
 // Method stolen from StackOverflow
-var getDistanceFromLatLonInKm = function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+var getDistanceFromLatLonInKm = function getDistanceFromLatLonInKm(point1, point2) {
+  var lat1 = point1.latitude;
+  var lon1 = point1.longitude;
+  var lat2 = point2.latitude;
+  var lon2 = point2.longitude;
   var R = 6371; // Radius of the earth in km
 
   var dLat = deg2rad(lat2 - lat1); // deg2rad below

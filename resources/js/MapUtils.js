@@ -1,5 +1,9 @@
 // Method stolen from StackOverflow
-export const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+export const getDistanceFromLatLonInKm = (point1, point2) => {
+    const lat1 = point1.latitude
+    const lon1 = point1.longitude
+    const lat2 = point2.latitude
+    const lon2 = point2.longitude
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(lat2 - lat1); // deg2rad below
     const dLon = deg2rad(lon2 - lon1);

@@ -25,6 +25,17 @@
             <label class="btn btn-outline-primary" for="distance"
                 >Distance</label
             >
+
+            <input
+                class="btn-check"
+                type="radio"
+                name="type"
+                id="move"
+                value="moveMarker"
+            />
+            <label class="btn btn-outline-primary" for="move"
+                >Move marker</label
+            >
         </div>
     </form>
 </template>
