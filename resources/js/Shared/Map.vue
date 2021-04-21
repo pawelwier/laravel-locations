@@ -48,8 +48,6 @@ export default {
 
         const mode = ref("");
 
-        const markerDraggable = ref(false);
-
         const addLatLng = ref({
             longitude: null,
             latitude: null,
@@ -108,7 +106,6 @@ export default {
                 case "calculateDistance":
                     return "Select two markers";
                 case "moveMarker":
-                    markerDraggable.value = true;
                     return "Drag a marker";
             }
         };
@@ -144,7 +141,34 @@ export default {
             }
         };
 
-        onMounted(() => {
+        const addLocations = (map, markersDraggable = false) => {
+            const selectedIcon = L.icon({
+                iconUrl:
+                    "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
+                iconSize: [40, 40],
+                iconAnchor: [17, 39],
+            });
+
+            locations.value.map((location) =>
+                L.marker(
+                    [location.latitude, location.longitude],
+                    selectedId.value && selectedId.value == location.id
+                        ? {
+                              icon: selectedIcon,
+                          }
+                        : {
+                              draggable: markersDraggable,
+                          }
+                )
+                    .addTo(map)
+                    .on("click", () => {
+                        setOnclick(mode.value, location);
+                    })
+                    .on("mouseover", (e) => displayPopup(e, location.title))
+                    .on("mouseout", () => (popupDisplayed.value = false))
+            );
+        };
+        const displayMap = (markersDraggable) => {
             const map = L.map("mapContainer")
                 .setView([52, 19], 6)
                 .on("contextmenu", onAddNewLocation)
@@ -161,32 +185,10 @@ export default {
                 }
             ).addTo(map);
 
-            const selectedIcon = L.icon({
-                iconUrl:
-                    "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
-                iconSize: [40, 40],
-                iconAnchor: [17, 39],
-            });
-            console.log(markerDraggable.value);
-            locations.value.map((location) =>
-                L.marker(
-                    [location.latitude, location.longitude],
-                    selectedId.value && selectedId.value == location.id
-                        ? {
-                              icon: selectedIcon,
-                          }
-                        : {
-                              draggable: markerDraggable.value,
-                          }
-                )
-                    .addTo(map)
-                    .on("click", () => {
-                        setOnclick(mode.value, location);
-                    })
-                    .on("mouseover", (e) => displayPopup(e, location.title))
-                    .on("mouseout", () => (popupDisplayed.value = false))
-            );
-        });
+            addLocations(map, markersDraggable);
+        };
+
+        onMounted(() => displayMap(true));
 
         return {
             popupDisplayed,
@@ -205,7 +207,6 @@ export default {
             distanceMarkerTwo,
             firstDistanceMarkerSelected,
             distanceText,
-            markerDraggable,
         };
     },
 };

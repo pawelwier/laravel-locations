@@ -15081,7 +15081,6 @@ __webpack_require__.r(__webpack_exports__);
     var firstDistanceMarkerSelected = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var distanceText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
     var mode = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
-    var markerDraggable = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)({
       longitude: null,
       latitude: null
@@ -15139,7 +15138,6 @@ __webpack_require__.r(__webpack_exports__);
           return "Select two markers";
 
         case "moveMarker":
-          markerDraggable.value = true;
           return "Drag a marker";
       }
     };
@@ -15169,26 +15167,18 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
 
-    (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
-      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
-      leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-        maxZoom: 18,
-        id: "mapbox/streets-v11",
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: accessToken
-      }).addTo(map);
+    var addLocations = function addLocations(map) {
+      var markersDraggable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var selectedIcon = leaflet__WEBPACK_IMPORTED_MODULE_0__.icon({
         iconUrl: "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
         iconSize: [40, 40],
         iconAnchor: [17, 39]
       });
-      console.log(markerDraggable.value);
       locations.value.map(function (location) {
         return leaflet__WEBPACK_IMPORTED_MODULE_0__.marker([location.latitude, location.longitude], selectedId.value && selectedId.value == location.id ? {
           icon: selectedIcon
         } : {
-          draggable: markerDraggable.value
+          draggable: markersDraggable
         }).addTo(map).on("click", function () {
           setOnclick(mode.value, location);
         }).on("mouseover", function (e) {
@@ -15197,6 +15187,22 @@ __webpack_require__.r(__webpack_exports__);
           return popupDisplayed.value = false;
         });
       });
+    };
+
+    var displayMap = function displayMap(markersDraggable) {
+      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
+      leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        maxZoom: 18,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: accessToken
+      }).addTo(map);
+      addLocations(map, markersDraggable);
+    };
+
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
+      return displayMap(true);
     });
     return {
       popupDisplayed: popupDisplayed,
@@ -15214,8 +15220,7 @@ __webpack_require__.r(__webpack_exports__);
       distanceMarkerOne: distanceMarkerOne,
       distanceMarkerTwo: distanceMarkerTwo,
       firstDistanceMarkerSelected: firstDistanceMarkerSelected,
-      distanceText: distanceText,
-      markerDraggable: markerDraggable
+      distanceText: distanceText
     };
   }
 });
