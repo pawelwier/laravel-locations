@@ -1,7 +1,9 @@
 <template>
     <form @submit.prevent="onLocationsUpdated">
-        Title: <input v-model="form.title" /><br />
-        Description: <input v-model="form.description" /><br />
+        <div>Title: <input v-model="form.title" /></div>
+        <div class="my-1">
+            Description: <input v-model="form.description" />
+        </div>
         <button class="btn" @click="onCancel">Cancel</button>
         <button class="btn btn-primary" type="submit">Add</button>
     </form>
