@@ -179,6 +179,7 @@ export default {
         };
 
         const addLocations = (map, markersDraggable = false) => {
+            const markerOptions = { draggable: markersDraggable };
             const selectedIcon = L.icon({
                 iconUrl:
                     "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_destination_location_adress_street-512.png",
@@ -191,11 +192,10 @@ export default {
                     [location.latitude, location.longitude],
                     selectedId.value && selectedId.value == location.id
                         ? {
+                              ...markerOptions,
                               icon: selectedIcon,
                           }
-                        : {
-                              draggable: markersDraggable,
-                          }
+                        : markerOptions
                 )
                     .addTo(map)
                     .on("click", () => {
@@ -259,6 +259,7 @@ export default {
 .location-form {
     position: absolute;
     top: 220px;
+    left: 40px;
     display: block;
     padding: 1rem;
     background-color: white;
