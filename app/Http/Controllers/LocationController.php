@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Location;
+use App\Models\User;
 
 class LocationController extends Controller
 {
@@ -20,6 +21,7 @@ class LocationController extends Controller
 
         return Inertia::render('Locations', [
             'locations' => Location::where('user_id', $user->id)->get(),
+            'users' => User::where('id', '!=', $user->id)->get(),
         ]);
     }
 

@@ -36,6 +36,16 @@
             <label class="btn btn-outline-primary" for="move"
                 >Move marker</label
             >
+            <input
+                class="btn-check"
+                type="radio"
+                name="type"
+                id="recommend"
+                value="recommendLocation"
+            />
+            <label class="btn btn-outline-primary" for="recommend"
+                >Recommend</label
+            >
         </div>
     </form>
 </template>
@@ -48,6 +58,8 @@ export default {
         const onTypeChanged = (e) => {
             context.emit("type-updated", e);
         };
+
+        const modes = [];
 
         return { onTypeChanged };
     },

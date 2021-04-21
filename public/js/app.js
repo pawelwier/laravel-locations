@@ -13016,6 +13016,40 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js ***!
+  \***************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    userList: Array
+  },
+  setup: function setup(props) {
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRefs)(props),
+        userList = _toRefs.userList;
+
+    var sendRecommend = function sendRecommend(user) {
+      console.log(user);
+    };
+
+    return {
+      userList: userList,
+      sendRecommend: sendRecommend
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js":
 /*!********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js ***!
@@ -13035,6 +13069,7 @@ __webpack_require__.r(__webpack_exports__);
       context.emit("type-updated", e);
     };
 
+    var modes = [];
     return {
       onTypeChanged: onTypeChanged
     };
@@ -14423,6 +14458,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     locations: Array,
+    users: Array,
     selectedId: Number
   },
   components: {
@@ -14953,8 +14989,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Components/PopupMarker */ "./resources/js/Components/PopupMarker.vue");
 /* harmony import */ var _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Components/CreateLocationForm */ "./resources/js/Components/CreateLocationForm.vue");
-/* harmony import */ var _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Components/SwitchModeForm */ "./resources/js/Components/SwitchModeForm.vue");
-/* harmony import */ var _MapUtils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../MapUtils */ "./resources/js/MapUtils.js");
+/* harmony import */ var _Components_RecommendLocationForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Components/RecommendLocationForm */ "./resources/js/Components/RecommendLocationForm.vue");
+/* harmony import */ var _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Components/SwitchModeForm */ "./resources/js/Components/SwitchModeForm.vue");
+/* harmony import */ var _MapUtils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MapUtils */ "./resources/js/MapUtils.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -14968,14 +15005,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PopupMarker: _Components_PopupMarker__WEBPACK_IMPORTED_MODULE_3__.default,
     CreateLocationForm: _Components_CreateLocationForm__WEBPACK_IMPORTED_MODULE_4__.default,
-    SwitchModeForm: _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_5__.default
+    SwitchModeForm: _Components_SwitchModeForm__WEBPACK_IMPORTED_MODULE_6__.default,
+    RecommendLocationForm: _Components_RecommendLocationForm__WEBPACK_IMPORTED_MODULE_5__.default
   },
   props: {
     locations: Array,
+    users: Array,
     selectedId: Number
   },
   emits: ["locations-updated", "instruction-text-updated"],
@@ -14984,10 +15024,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
         locations = _toRefs.locations,
+        users = _toRefs.users,
         selectedId = _toRefs.selectedId;
 
     var popupDisplayed = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var showAddMarkerForm = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
+    var showRecommendForm = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var popupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
     var distanceMarkerOne = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
     var distanceMarkerTwo = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
@@ -15024,6 +15066,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       showAddMarkerForm.value = false;
     };
 
+    var displayRecommendForm = function displayRecommendForm() {
+      showRecommendForm.value = true;
+    };
+
+    var hideRecommendForm = function hideRecommendForm() {
+      showRecommendForm.value = false;
+    };
+
     var setDistanceMode = function setDistanceMode(text) {
       mode.value = text;
     };
@@ -15039,6 +15089,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         case "calculateDistance":
           return selectDistanceLocations(location);
+
+        case "recommendLocation":
+          return recommedLocationToUser(location);
       }
     };
 
@@ -15055,6 +15108,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         case "moveMarker":
           reloadMap(true);
           return "Drag a marker";
+
+        case "recommendLocation":
+          console.log(users);
+          reloadMap(false);
+          return "Select a location to recommend";
       }
     };
 
@@ -15079,7 +15137,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return;
         }
 
-        distanceText.value += " to ".concat(location.title, " equals ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)(points[0], points[1]), "km");
+        distanceText.value += " to ".concat(location.title, " equals ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_7__.getDistanceFromLatLonInKm)(points[0], points[1]), "km");
       }
     };
 
@@ -15088,7 +15146,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         longitude: point.lng,
         latitude: point.lat
       };
-      distanceText.value = "The ".concat(location.title, " marker has been moved ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)(location, draggedPoint), "km ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDirectionFromLatLonInKm)(location, draggedPoint));
+      distanceText.value = "The ".concat(location.title, " marker has been moved ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_7__.getDistanceFromLatLonInKm)(location, draggedPoint), "km ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_7__.getDirectionFromLatLonInKm)(location, draggedPoint));
     };
 
     var updateDragLocation = function updateDragLocation(location, point) {
@@ -15099,6 +15157,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         longitude: point.lng
       };
       _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.put("/locations/".concat(location.id), updatedLocation);
+    };
+
+    var recommedLocationToUser = function recommedLocationToUser(location) {
+      displayRecommendForm();
+      console.log(location);
     };
 
     var reloadMap = function reloadMap(isDraggable) {
@@ -15135,7 +15198,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
 
     var displayMap = function displayMap(markersDraggable) {
-      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", hideAddMarkerForm);
+      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.map("mapContainer").setView([52, 19], 6).on("contextmenu", onAddNewLocation).on("click", function () {
+        hideAddMarkerForm();
+        hideRecommendForm();
+      });
       leaflet__WEBPACK_IMPORTED_MODULE_0__.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         maxZoom: 18,
         id: "mapbox/streets-v11",
@@ -15152,6 +15218,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       popupDisplayed: popupDisplayed,
       showAddMarkerForm: showAddMarkerForm,
+      showRecommendForm: showRecommendForm,
       accessToken: accessToken,
       displayAddMarkerForm: displayAddMarkerForm,
       hideAddMarkerForm: hideAddMarkerForm,
@@ -15257,6 +15324,49 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+var _withId = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.withScopeId)("data-v-75d6993a");
+
+(0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-75d6993a");
+
+var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Recommend to user: ");
+
+(0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
+
+var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.userList, function (user) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
+      key: user
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      onClick: function onClick() {
+        return $setup.sendRecommend(user);
+      },
+      "class": "user-select px-1"
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 9
+    /* TEXT, PROPS */
+    , ["onClick"])]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))], 64
+  /* STABLE_FRAGMENT */
+  );
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6":
 /*!************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=template&id=2ec10de6 ***!
@@ -15308,7 +15418,16 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("
 }), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
   "class": "btn btn-outline-primary",
   "for": "move"
-}, "Move marker")], -1
+}, "Move marker"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  "class": "btn-check",
+  type: "radio",
+  name: "type",
+  id: "recommend",
+  value: "recommendLocation"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
+  "class": "btn btn-outline-primary",
+  "for": "recommend"
+}, "Recommend")], -1
 /* HOISTED */
 );
 
@@ -18703,12 +18822,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* TEXT */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Map, {
         locations: $props.locations,
+        users: $props.users,
         selectedId: $setup.selectedId,
         onLocationsUpdated: $setup.refreshLocations,
         onInstructionTextUpdated: $setup.updateInstructionText
       }, null, 8
       /* PROPS */
-      , ["locations", "selectedId", "onLocationsUpdated", "onInstructionTextUpdated"])])];
+      , ["locations", "users", "selectedId", "onLocationsUpdated", "onInstructionTextUpdated"])])];
     }),
     _: 1
     /* STABLE */
@@ -19845,44 +19965,54 @@ var _hoisted_1 = {
   key: 0,
   "class": "location-form"
 };
+var _hoisted_2 = {
+  key: 1,
+  "class": "recommend-form"
+};
 
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   id: "mapContainer",
   "class": "basemap"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_3 = {
+var _hoisted_4 = {
   "class": "mode-switch"
 };
-var _hoisted_4 = {
-  key: 1
+var _hoisted_5 = {
+  key: 2
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_create_location_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("create-location-form");
+
+  var _component_recommend_location_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("recommend-location-form");
 
   var _component_PopupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PopupMarker");
 
   var _component_switch_mode_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("switch-mode-form");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_create_location_form, {
-    latlng: this.addLatLng,
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [$setup.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_create_location_form, {
+    latlng: $setup.addLatLng,
     onCanceled: $setup.hideAddMarkerForm,
     onLocationsUpdated: $setup.refreshLocations
   }, null, 8
   /* PROPS */
-  , ["latlng", "onCanceled", "onLocationsUpdated"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
+  , ["latlng", "onCanceled", "onLocationsUpdated"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.showRecommendForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_recommend_location_form, {
+    userList: $props.users
+  }, null, 8
+  /* PROPS */
+  , ["userList"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
     ref: "popupMarker"
   }, null, 512
   /* NEED_PATCH */
   )], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_switch_mode_form, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_switch_mode_form, {
     onTypeUpdated: $setup.onTypeChanged
   }, null, 8
   /* PROPS */
-  , ["onTypeUpdated"])]), $setup.distanceText ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.distanceText), 1
+  , ["onTypeUpdated"])]), $setup.distanceText ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.distanceText), 1
   /* TEXT */
   )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
   /* STABLE_FRAGMENT */
@@ -20024,6 +20154,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.popup-marker {\n    position: absolute;\n    z-index: 9999;\n    padding: 0.4em;\n    background-color: white;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-select[data-v-75d6993a] {\n    cursor: pointer;\n}\n.user-select[data-v-75d6993a]:hover {\n    color: white;\n    background-color: darkgrey;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -20215,7 +20369,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.location-form {\n    position: absolute;\n    top: 220px;\n    left: 40px;\n    display: block;\n    padding: 1rem;\n    background-color: white;\n    z-index: 9999;\n}\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 2rem 0;\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.location-form,\n.recommend-form {\n    position: absolute;\n    top: 220px;\n    left: 40px;\n    display: block;\n    padding: 1rem;\n    background-color: white;\n    z-index: 9999;\n}\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 2rem 0;\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -55082,6 +55236,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_style_index_0_id_75d6993a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_style_index_0_id_75d6993a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_style_index_0_id_75d6993a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=style&index=0&id=2ec10de6&lang=css":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/SwitchModeForm.vue?vue&type=style&index=0&id=2ec10de6&lang=css ***!
@@ -55653,6 +55837,36 @@ if (false) {}
 _PopupMarker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.__file = "resources/js/Components/PopupMarker.vue"
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_PopupMarker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default);
+
+/***/ }),
+
+/***/ "./resources/js/Components/RecommendLocationForm.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/Components/RecommendLocationForm.vue ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _RecommendLocationForm_vue_vue_type_template_id_75d6993a_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true */ "./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true");
+/* harmony import */ var _RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RecommendLocationForm.vue?vue&type=script&lang=js */ "./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js");
+/* harmony import */ var _RecommendLocationForm_vue_vue_type_style_index_0_id_75d6993a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css */ "./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css");
+
+
+
+
+;
+_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.render = _RecommendLocationForm_vue_vue_type_template_id_75d6993a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render
+_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.__scopeId = "data-v-75d6993a"
+/* hot reload */
+if (false) {}
+
+_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default.__file = "resources/js/Components/RecommendLocationForm.vue"
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__.default);
 
 /***/ }),
 
@@ -56952,6 +57166,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__.default)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./RecommendLocationForm.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
 /***/ "./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js":
 /*!****************************************************************************!*\
   !*** ./resources/js/Components/SwitchModeForm.vue?vue&type=script&lang=js ***!
@@ -57668,6 +57898,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PopupMarker_vue_vue_type_template_id_ad0e37ea__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PopupMarker_vue_vue_type_template_id_ad0e37ea__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PopupMarker.vue?vue&type=template&id=ad0e37ea */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/PopupMarker.vue?vue&type=template&id=ad0e37ea");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_template_id_75d6993a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_template_id_75d6993a_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=template&id=75d6993a&scoped=true");
 
 
 /***/ }),
@@ -58449,6 +58695,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_PopupMarker_vue_vue_type_style_index_0_id_ad0e37ea_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./PopupMarker.vue?vue&type=style&index=0&id=ad0e37ea&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/PopupMarker.vue?vue&type=style&index=0&id=ad0e37ea&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css":
+/*!*******************************************************************************************************************!*\
+  !*** ./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css ***!
+  \*******************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_RecommendLocationForm_vue_vue_type_style_index_0_id_75d6993a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Components/RecommendLocationForm.vue?vue&type=style&index=0&id=75d6993a&scoped=true&lang=css");
 
 
 /***/ }),

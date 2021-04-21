@@ -7,6 +7,7 @@
         <div class="main-wrapper">
             <Map
                 :locations="locations"
+                :users="users"
                 :selectedId="selectedId"
                 @locations-updated="refreshLocations"
                 @instruction-text-updated="updateInstructionText"
@@ -24,6 +25,7 @@ import Map from "../Shared/Map";
 export default {
     props: {
         locations: Array,
+        users: Array,
         selectedId: Number,
     },
     components: {

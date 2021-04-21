@@ -1,10 +1,13 @@
 <template>
-    <div class="location-form" v-if="this.showAddMarkerForm">
+    <div class="location-form" v-if="showAddMarkerForm">
         <create-location-form
-            :latlng="this.addLatLng"
+            :latlng="addLatLng"
             @canceled="hideAddMarkerForm"
             @locations-updated="refreshLocations"
         ></create-location-form>
+    </div>
+    <div class="recommend-form" v-if="showRecommendForm">
+        <recommend-location-form :userList="users"></recommend-location-form>
     </div>
     <div id="mapContainer" class="basemap"></div>
     <div v-show="popupDisplayed">
@@ -22,6 +25,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { onMounted, ref, toRefs } from "vue";
 import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
+import RecommendLocationForm from "../Components/RecommendLocationForm";
 import SwitchModeForm from "../Components/SwitchModeForm";
 import {
     getDistanceFromLatLonInKm,
@@ -33,16 +37,18 @@ export default {
         PopupMarker,
         CreateLocationForm,
         SwitchModeForm,
+        RecommendLocationForm,
     },
-    props: { locations: Array, selectedId: Number },
+    props: { locations: Array, users: Array, selectedId: Number },
     emits: ["locations-updated", "instruction-text-updated"],
     setup(props, context) {
         const accessToken = process.env.MIX_MAP_TOKEN;
 
-        const { locations, selectedId } = toRefs(props);
+        const { locations, users, selectedId } = toRefs(props);
 
         const popupDisplayed = ref(false);
         const showAddMarkerForm = ref(false);
+        const showRecommendForm = ref(false);
         const popupMarker = ref(null);
 
         const distanceMarkerOne = ref(null);
@@ -86,6 +92,14 @@ export default {
             showAddMarkerForm.value = false;
         };
 
+        const displayRecommendForm = () => {
+            showRecommendForm.value = true;
+        };
+
+        const hideRecommendForm = () => {
+            showRecommendForm.value = false;
+        };
+
         const setDistanceMode = (text) => {
             mode.value = text;
         };
@@ -100,6 +114,8 @@ export default {
                     return goToLocation(location.id);
                 case "calculateDistance":
                     return selectDistanceLocations(location);
+                case "recommendLocation":
+                    return recommedLocationToUser(location);
             }
         };
 
@@ -114,6 +130,10 @@ export default {
                 case "moveMarker":
                     reloadMap(true);
                     return "Drag a marker";
+                case "recommendLocation":
+                    console.log(users);
+                    reloadMap(false);
+                    return "Select a location to recommend";
             }
         };
 
@@ -172,6 +192,11 @@ export default {
             Inertia.put(`/locations/${location.id}`, updatedLocation);
         };
 
+        const recommedLocationToUser = (location) => {
+            displayRecommendForm();
+            console.log(location);
+        };
+
         const reloadMap = (isDraggable) => {
             const map = L.DomUtil.get("mapContainer");
             map._leaflet_id = null;
@@ -215,7 +240,10 @@ export default {
             const map = L.map("mapContainer")
                 .setView([52, 19], 6)
                 .on("contextmenu", onAddNewLocation)
-                .on("click", hideAddMarkerForm);
+                .on("click", () => {
+                    hideAddMarkerForm();
+                    hideRecommendForm();
+                });
 
             L.tileLayer(
                 "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -236,6 +264,7 @@ export default {
         return {
             popupDisplayed,
             showAddMarkerForm,
+            showRecommendForm,
             accessToken,
             displayAddMarkerForm,
             hideAddMarkerForm,
@@ -256,7 +285,8 @@ export default {
 </script>
 
 <style>
-.location-form {
+.location-form,
+.recommend-form {
     position: absolute;
     top: 220px;
     left: 40px;
