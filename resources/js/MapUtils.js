@@ -22,3 +22,15 @@ export const getDistanceFromLatLonInKm = (point1, point2) => {
 const deg2rad = (deg) => {
     return deg * (Math.PI / 180);
 }
+
+export const getDirectionFromLatLonInKm = (point1, point2) => {
+    const lat1 = point1.latitude
+    const lon1 = point1.longitude
+    const lat2 = point2.latitude
+    const lon2 = point2.longitude
+
+    let sn = lat2 > lat1 ? 'North' : lat1 > lat2 ? 'South' : null;
+    let ew = lon2 > lon1 ? 'East' : lon1 > lon2 ? 'West' : null;
+
+    return `${sn}-${ew}`
+}

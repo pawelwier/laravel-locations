@@ -15132,12 +15132,15 @@ __webpack_require__.r(__webpack_exports__);
     var setDisplayText = function setDisplayText(eventValue) {
       switch (eventValue) {
         case "displayLocationDetails":
+          reloadMap(false);
           return "Click on a marker to show details";
 
         case "calculateDistance":
+          reloadMap(false);
           return "Select two markers";
 
         case "moveMarker":
+          reloadMap(true);
           return "Drag a marker";
       }
     };
@@ -15167,6 +15170,30 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
 
+    var startDragLocation = function startDragLocation(location, point) {
+      var draggedPoint = {
+        longitude: point.lng,
+        latitude: point.lat
+      };
+      distanceText.value = "The ".concat(location.title, " marker has been moved ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDistanceFromLatLonInKm)(location, draggedPoint), "km ").concat((0,_MapUtils__WEBPACK_IMPORTED_MODULE_6__.getDirectionFromLatLonInKm)(location, draggedPoint));
+    };
+
+    var updateDragLocation = function updateDragLocation(location, point) {
+      var updatedLocation = {
+        title: location.title,
+        description: location.description,
+        latitude: point.lat,
+        longitude: point.lng
+      };
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.put("/locations/".concat(location.id), updatedLocation);
+    };
+
+    var reloadMap = function reloadMap(isDraggable) {
+      var map = leaflet__WEBPACK_IMPORTED_MODULE_0__.DomUtil.get("mapContainer");
+      map._leaflet_id = null;
+      displayMap(isDraggable);
+    };
+
     var addLocations = function addLocations(map) {
       var markersDraggable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       var selectedIcon = leaflet__WEBPACK_IMPORTED_MODULE_0__.icon({
@@ -15185,6 +15212,10 @@ __webpack_require__.r(__webpack_exports__);
           return displayPopup(e, location.title);
         }).on("mouseout", function () {
           return popupDisplayed.value = false;
+        }).on("drag", function (e) {
+          return startDragLocation(location, e.target._latlng);
+        }).on("dragend", function (e) {
+          updateDragLocation(location, e.target._latlng);
         });
       });
     };
@@ -15202,7 +15233,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     (0,vue__WEBPACK_IMPORTED_MODULE_2__.onMounted)(function () {
-      return displayMap(true);
+      return displayMap(false);
     });
     return {
       popupDisplayed: popupDisplayed,
@@ -20269,45 +20300,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
+var _hoisted_1 = {
+  key: 0,
+  "class": "location-form"
+};
 
-var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   id: "mapContainer",
   "class": "basemap"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2 = {
+var _hoisted_3 = {
   "class": "mode-switch"
 };
-var _hoisted_3 = {
-  key: 0
+var _hoisted_4 = {
+  key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_PopupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PopupMarker");
-
   var _component_create_location_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("create-location-form");
+
+  var _component_PopupMarker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PopupMarker");
 
   var _component_switch_mode_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("switch-mode-form");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
-    ref: "popupMarker"
-  }, null, 512
-  /* NEED_PATCH */
-  )], 512
-  /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_create_location_form, {
-    key: 0,
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [this.showAddMarkerForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_create_location_form, {
     latlng: this.addLatLng,
     onCanceled: $setup.hideAddMarkerForm,
     onLocationsUpdated: $setup.refreshLocations
   }, null, 8
   /* PROPS */
-  , ["latlng", "onCanceled", "onLocationsUpdated"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_switch_mode_form, {
+  , ["latlng", "onCanceled", "onLocationsUpdated"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
+    ref: "popupMarker"
+  }, null, 512
+  /* NEED_PATCH */
+  )], 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $setup.popupDisplayed]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_switch_mode_form, {
     onTypeUpdated: $setup.onTypeChanged
   }, null, 8
   /* PROPS */
-  , ["onTypeUpdated"])]), $setup.distanceText ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.distanceText), 1
+  , ["onTypeUpdated"])]), $setup.distanceText ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.distanceText), 1
   /* TEXT */
   )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
   /* STABLE_FRAGMENT */
@@ -20325,7 +20359,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getDistanceFromLatLonInKm": () => (/* binding */ getDistanceFromLatLonInKm)
+/* harmony export */   "getDistanceFromLatLonInKm": () => (/* binding */ getDistanceFromLatLonInKm),
+/* harmony export */   "getDirectionFromLatLonInKm": () => (/* binding */ getDirectionFromLatLonInKm)
 /* harmony export */ });
 // Method stolen from StackOverflow
 var getDistanceFromLatLonInKm = function getDistanceFromLatLonInKm(point1, point2) {
@@ -20347,6 +20382,16 @@ var getDistanceFromLatLonInKm = function getDistanceFromLatLonInKm(point1, point
 
 var deg2rad = function deg2rad(deg) {
   return deg * (Math.PI / 180);
+};
+
+var getDirectionFromLatLonInKm = function getDirectionFromLatLonInKm(point1, point2) {
+  var lat1 = point1.latitude;
+  var lon1 = point1.longitude;
+  var lat2 = point2.latitude;
+  var lon2 = point2.longitude;
+  var sn = lat2 > lat1 ? 'North' : lat1 > lat2 ? 'South' : null;
+  var ew = lon2 > lon1 ? 'East' : lon1 > lon2 ? 'West' : null;
+  return "".concat(sn, "-").concat(ew);
 };
 
 /***/ }),
@@ -20629,7 +20674,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 2rem 0;\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.location-form {\n    position: absolute;\n    top: 220px;\n    display: block;\n    padding: 1rem;\n    background-color: white;\n    z-index: 9999;\n}\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 2rem 0;\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

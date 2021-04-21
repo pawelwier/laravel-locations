@@ -1,15 +1,16 @@
 <template>
+    <div class="location-form" v-if="this.showAddMarkerForm">
+        <create-location-form
+            :latlng="this.addLatLng"
+            @canceled="hideAddMarkerForm"
+            @locations-updated="refreshLocations"
+        ></create-location-form>
+    </div>
     <div id="mapContainer" class="basemap"></div>
     <div v-show="popupDisplayed">
         <PopupMarker ref="popupMarker"></PopupMarker>
     </div>
     <div class="mode-switch">
-        <create-location-form
-            v-if="this.showAddMarkerForm"
-            :latlng="this.addLatLng"
-            @canceled="hideAddMarkerForm"
-            @locations-updated="refreshLocations"
-        ></create-location-form>
         <switch-mode-form @type-updated="onTypeChanged"></switch-mode-form>
     </div>
     <div v-if="distanceText">{{ distanceText }}</div>
@@ -22,7 +23,10 @@ import { onMounted, ref, toRefs } from "vue";
 import PopupMarker from "../Components/PopupMarker";
 import CreateLocationForm from "../Components/CreateLocationForm";
 import SwitchModeForm from "../Components/SwitchModeForm";
-import { getDistanceFromLatLonInKm } from "../MapUtils";
+import {
+    getDistanceFromLatLonInKm,
+    getDirectionFromLatLonInKm,
+} from "../MapUtils";
 
 export default {
     components: {
@@ -102,10 +106,13 @@ export default {
         const setDisplayText = (eventValue) => {
             switch (eventValue) {
                 case "displayLocationDetails":
+                    reloadMap(false);
                     return "Click on a marker to show details";
                 case "calculateDistance":
+                    reloadMap(false);
                     return "Select two markers";
                 case "moveMarker":
+                    reloadMap(true);
                     return "Drag a marker";
             }
         };
@@ -141,6 +148,36 @@ export default {
             }
         };
 
+        const startDragLocation = (location, point) => {
+            const draggedPoint = {
+                longitude: point.lng,
+                latitude: point.lat,
+            };
+            distanceText.value = `The ${
+                location.title
+            } marker has been moved ${getDistanceFromLatLonInKm(
+                location,
+                draggedPoint
+            )}km ${getDirectionFromLatLonInKm(location, draggedPoint)}`;
+        };
+
+        const updateDragLocation = (location, point) => {
+            const updatedLocation = {
+                title: location.title,
+                description: location.description,
+                latitude: point.lat,
+                longitude: point.lng,
+            };
+
+            Inertia.put(`/locations/${location.id}`, updatedLocation);
+        };
+
+        const reloadMap = (isDraggable) => {
+            const map = L.DomUtil.get("mapContainer");
+            map._leaflet_id = null;
+            displayMap(isDraggable);
+        };
+
         const addLocations = (map, markersDraggable = false) => {
             const selectedIcon = L.icon({
                 iconUrl:
@@ -166,6 +203,12 @@ export default {
                     })
                     .on("mouseover", (e) => displayPopup(e, location.title))
                     .on("mouseout", () => (popupDisplayed.value = false))
+                    .on("drag", (e) =>
+                        startDragLocation(location, e.target._latlng)
+                    )
+                    .on("dragend", (e) => {
+                        updateDragLocation(location, e.target._latlng);
+                    })
             );
         };
         const displayMap = (markersDraggable) => {
@@ -188,7 +231,7 @@ export default {
             addLocations(map, markersDraggable);
         };
 
-        onMounted(() => displayMap(true));
+        onMounted(() => displayMap(false));
 
         return {
             popupDisplayed,
@@ -213,6 +256,15 @@ export default {
 </script>
 
 <style>
+.location-form {
+    position: absolute;
+    top: 220px;
+    display: block;
+    padding: 1rem;
+    background-color: white;
+    z-index: 9999;
+}
+
 .basemap {
     height: 38em;
     width: 40em;
