@@ -15385,9 +15385,11 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       onClick: function onClick() {
         return $setup.selectUser(user.id);
       },
-      "class": "user-select px-1"
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 9
-    /* TEXT, PROPS */
+      "class": ["user-select px-1", {
+        'selected-user': $setup.selectedUserId == user.id
+      }]
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 11
+    /* TEXT, CLASS, PROPS */
     , ["onClick"])]);
   }), 128
   /* KEYED_FRAGMENT */
@@ -20222,7 +20224,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.user-select[data-v-75d6993a] {\n    cursor: pointer;\n}\n.user-select[data-v-75d6993a]:hover {\n    color: white;\n    background-color: darkgrey;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-select[data-v-75d6993a] {\n    cursor: pointer;\n}\n.selected-user[data-v-75d6993a] {\n    background-color: dodgerblue;\n    color: white;\n}\n.user-select[data-v-75d6993a]:hover {\n    color: white;\n    background-color: darkgrey;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

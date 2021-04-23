@@ -1,7 +1,11 @@
 <template>
     Recommend to user:
     <div v-for="user in userList" v-bind:key="user">
-        <div @click="() => selectUser(user.id)" class="user-select px-1">
+        <div
+            @click="() => selectUser(user.id)"
+            class="user-select px-1"
+            :class="{ 'selected-user': selectedUserId == user.id }"
+        >
             {{ user.email }}
         </div>
     </div>
@@ -57,6 +61,12 @@ export default {
 .user-select {
     cursor: pointer;
 }
+
+.selected-user {
+    background-color: dodgerblue;
+    color: white;
+}
+
 .user-select:hover {
     color: white;
     background-color: darkgrey;
