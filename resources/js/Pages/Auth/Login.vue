@@ -73,6 +73,7 @@ export default {
         });
 
         const submitLogin = () => {
+            console.log(form);
             form.post("/login");
         };
 

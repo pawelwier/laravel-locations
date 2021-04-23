@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Location;
+use App\Models\Recommendation;
 
 class User extends Authenticatable
 {
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function locations()
     {
         return $this->hasMany(Location::class);
+    }
+    
+    public function recommendations()
+    {
+        return $this->hasMany(Recommendation::class);
     }
 }

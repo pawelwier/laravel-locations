@@ -13027,23 +13027,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    userList: Array
+    userList: Array,
+    locationId: Number
   },
   setup: function setup(props) {
-    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRefs)(props),
-        userList = _toRefs.userList;
+    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_2__.toRefs)(props),
+        userList = _toRefs.userList,
+        locationId = _toRefs.locationId;
 
-    var sendRecommend = function sendRecommend(user) {
-      console.log(user);
+    var userInfo = (0,vue__WEBPACK_IMPORTED_MODULE_2__.computed)(function () {
+      return (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.usePage)().props.value.user_info;
+    });
+    var selectedUserId = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    var messageText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
+
+    var sendRecommend = function sendRecommend() {
+      var req = {
+        target_user: selectedUserId.value,
+        user_id: userInfo.value.id,
+        location_id: locationId.value,
+        message: messageText.value
+      };
+      console.log(req);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia.post("/recommendations", req);
+    };
+
+    var selectUser = function selectUser(id) {
+      selectedUserId.value = id;
     };
 
     return {
+      messageText: messageText,
       userList: userList,
-      sendRecommend: sendRecommend
+      sendRecommend: sendRecommend,
+      selectUser: selectUser,
+      selectedUserId: selectedUserId,
+      userInfo: userInfo
     };
   }
 });
@@ -14069,6 +14096,7 @@ __webpack_require__.r(__webpack_exports__);
     });
 
     var submitLogin = function submitLogin() {
+      console.log(form);
       form.post("/login");
     };
 
@@ -15035,6 +15063,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var distanceMarkerTwo = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
     var firstDistanceMarkerSelected = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     var distanceText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
+    var recommendedLocationId = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
     var mode = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)("");
     var addLatLng = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)({
       longitude: null,
@@ -15066,8 +15095,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       showAddMarkerForm.value = false;
     };
 
-    var displayRecommendForm = function displayRecommendForm() {
+    var displayRecommendForm = function displayRecommendForm(id) {
       showRecommendForm.value = true;
+      recommendedLocationId.value = id;
     };
 
     var hideRecommendForm = function hideRecommendForm() {
@@ -15160,7 +15190,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
 
     var recommedLocationToUser = function recommedLocationToUser(location) {
-      displayRecommendForm();
+      displayRecommendForm(location.id);
       console.log(location);
     };
 
@@ -15232,7 +15262,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       distanceMarkerOne: distanceMarkerOne,
       distanceMarkerTwo: distanceMarkerTwo,
       firstDistanceMarkerSelected: firstDistanceMarkerSelected,
-      distanceText: distanceText
+      distanceText: distanceText,
+      recommendedLocationId: recommendedLocationId
     };
   }
 });
@@ -15352,7 +15383,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       key: user
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
       onClick: function onClick() {
-        return $setup.sendRecommend(user);
+        return $setup.selectUser(user.id);
       },
       "class": "user-select px-1"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 9
@@ -15360,7 +15391,20 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     , ["onClick"])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))], 64
+  )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+    "class": "form-control my-3",
+    type: "text",
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+      return $setup.messageText = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.messageText]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+    "class": "btn btn-primary",
+    onClick: _cache[2] || (_cache[2] = function () {
+      return $setup.sendRecommend && $setup.sendRecommend.apply($setup, arguments);
+    })
+  }, "Send")], 64
   /* STABLE_FRAGMENT */
   );
 });
@@ -19999,10 +20043,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8
   /* PROPS */
   , ["latlng", "onCanceled", "onLocationsUpdated"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.showRecommendForm ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_recommend_location_form, {
-    userList: $props.users
+    userList: $props.users,
+    locationId: $setup.recommendedLocationId
   }, null, 8
   /* PROPS */
-  , ["userList"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
+  , ["userList", "locationId"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PopupMarker, {
     ref: "popupMarker"
   }, null, 512
   /* NEED_PATCH */

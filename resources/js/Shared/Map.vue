@@ -7,7 +7,10 @@
         ></create-location-form>
     </div>
     <div class="recommend-form" v-if="showRecommendForm">
-        <recommend-location-form :userList="users"></recommend-location-form>
+        <recommend-location-form
+            :userList="users"
+            :locationId="recommendedLocationId"
+        ></recommend-location-form>
     </div>
     <div id="mapContainer" class="basemap"></div>
     <div v-show="popupDisplayed">
@@ -55,6 +58,7 @@ export default {
         const distanceMarkerTwo = ref(null);
         const firstDistanceMarkerSelected = ref(false);
         const distanceText = ref("");
+        const recommendedLocationId = ref(null);
 
         const mode = ref("");
 
@@ -92,8 +96,9 @@ export default {
             showAddMarkerForm.value = false;
         };
 
-        const displayRecommendForm = () => {
+        const displayRecommendForm = (id) => {
             showRecommendForm.value = true;
+            recommendedLocationId.value = id;
         };
 
         const hideRecommendForm = () => {
@@ -193,7 +198,7 @@ export default {
         };
 
         const recommedLocationToUser = (location) => {
-            displayRecommendForm();
+            displayRecommendForm(location.id);
             console.log(location);
         };
 
@@ -279,6 +284,7 @@ export default {
             distanceMarkerTwo,
             firstDistanceMarkerSelected,
             distanceText,
+            recommendedLocationId,
         };
     },
 };
