@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Location;
+use App\Models\Recommendation;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,7 +34,10 @@ class HomeController extends Controller
         $user = Auth::user();
 
         return Inertia::render('Dashboard', [
-            'locations' => Location::where('user_id', $user->id)->get()
+            'locations' => Location::where('user_id', $user->id)->get(),
+            'allLocations' => Location::all(),
+            'allUsers' => User::all(),
+            'recommendedLocations' => Recommendation::where('target_user', $user->id)->get()
         ]);
     }
 }

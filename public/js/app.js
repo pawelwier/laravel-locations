@@ -14364,7 +14364,10 @@ __webpack_require__.r(__webpack_exports__);
     Layout: _Shared_Layout__WEBPACK_IMPORTED_MODULE_2__.default
   },
   props: {
-    locations: Array
+    locations: Array,
+    allLocations: Array,
+    allUsers: Array,
+    recommendedLocations: Array
   },
   setup: function setup(props) {
     var userInfo = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
@@ -14373,17 +14376,32 @@ __webpack_require__.r(__webpack_exports__);
     var showAllLocations = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
     var showallText = "Show all (".concat(props.locations.length, ")");
     var toggleButtonText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(showallText);
+    var recommendedLocations = props.recommendedLocations;
 
     var toggleShowLocations = function toggleShowLocations() {
       toggleButtonText.value = showAllLocations.value ? showallText : "Hide";
       showAllLocations.value = !showAllLocations.value;
     };
 
+    var makeRecommendMessage = function makeRecommendMessage(recommendedLocation) {
+      var user_id = recommendedLocation.user_id,
+          location_id = recommendedLocation.location_id;
+      var user = props.allUsers.find(function (u) {
+        return u.id === user_id;
+      });
+      var location = props.allLocations.find(function (l) {
+        return l.id === location_id;
+      });
+      return "User ".concat(user.name, " recommends you The following location: ").concat(location.title, " (").concat(location.description, ") to you.");
+    };
+
     return {
       userInfo: userInfo,
       showAllLocations: showAllLocations,
       toggleShowLocations: toggleShowLocations,
-      toggleButtonText: toggleButtonText
+      toggleButtonText: toggleButtonText,
+      recommendedLocations: recommendedLocations,
+      makeRecommendMessage: makeRecommendMessage
     };
   }
 });
@@ -15388,7 +15406,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       "class": ["user-select px-1", {
         'selected-user': $setup.selectedUserId == user.id
       }]
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 11
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name), 11
     /* TEXT, CLASS, PROPS */
     , ["onClick"])]);
   }), 128
@@ -18553,14 +18571,26 @@ var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h3", null, "User locations", -1
+var _hoisted_14 = {
+  key: 0
+};
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h3", null, "User locations", -1
 /* HOISTED */
 );
 
-var _hoisted_15 = {
+var _hoisted_16 = {
   key: 0,
   "class": "list-group"
 };
+var _hoisted_17 = {
+  key: 1,
+  "class": "mt-3"
+};
+
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h3", null, "Recommended locations", -1
+/* HOISTED */
+);
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
@@ -18577,14 +18607,14 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       /* TEXT */
       )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date($setup.userInfo.created_at).toLocaleString()), 1
       /* TEXT */
-      )])])])]), _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+      )])])])]), $props.locations.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_14, [_hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
         "class": "btn btn-outline-info",
         onClick: _cache[1] || (_cache[1] = function () {
           return $setup.toggleShowLocations && $setup.toggleShowLocations.apply($setup, arguments);
         })
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.toggleButtonText), 1
       /* TEXT */
-      ), $setup.showAllLocations ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_15, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.locations, function (location) {
+      ), $setup.showAllLocations ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.locations, function (location) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_inertia_link, {
           key: location.id,
           "class": "list-group-item list-group-item-action",
@@ -18603,7 +18633,16 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         , ["href"]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])];
+      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.recommendedLocations.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.recommendedLocations, function (location) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
+          key: location.id,
+          "class": "list-group-item list-group-item-action"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.makeRecommendMessage(location)), 1
+        /* TEXT */
+        );
+      }), 128
+      /* KEYED_FRAGMENT */
+      ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
     }),
     _: 1
     /* STABLE */

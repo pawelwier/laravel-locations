@@ -6,7 +6,7 @@
             class="user-select px-1"
             :class="{ 'selected-user': selectedUserId == user.id }"
         >
-            {{ user.email }}
+            {{ user.name }}
         </div>
     </div>
     <input class="form-control my-3" type="text" v-model="messageText" />
