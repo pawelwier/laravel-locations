@@ -27,6 +27,13 @@ class RecommendationController extends Controller
             
         $request->user()->recommendations()->create($validated);
 
-        return redirect('/locations')->with('success', 'Location updated');
+        return redirect('/locations')->with('success', 'Recommendation created');
+    }
+
+    public function destroy(Recommendation $recommendation)
+    {
+        $recommendation->delete();
+
+        return redirect('/dashboard')->with('success', 'Recommendation deleted');
     }
 }

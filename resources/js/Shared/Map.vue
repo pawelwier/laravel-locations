@@ -318,7 +318,7 @@ export default {
 }
 
 .mode-switch {
-    padding: 2rem 0;
+    padding: 1rem 0;
     display: block;
 }
 </style>

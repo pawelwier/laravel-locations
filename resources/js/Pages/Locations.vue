@@ -63,7 +63,7 @@ export default {
 .main-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .add-location-info {

@@ -54,11 +54,51 @@
                 <h3>Recommended locations</h3>
                 <div>
                     <div
-                        v-for="location in recommendedLocations"
-                        :key="location.id"
-                        class="list-group-item list-group-item-action"
+                        v-for="recommendation in recommendedLocations"
+                        :key="recommendation.id"
+                        class="list-group-item list-group-item-action recommend-wrapper"
                     >
-                        {{ makeRecommendMessage(location) }}
+                        <div>
+                            <strong>{{
+                                getRecommendationDetails(recommendation).user
+                                    .name
+                            }}</strong>
+                            recommends the following location:
+                            <strong>{{
+                                getRecommendationDetails(recommendation)
+                                    .location.title
+                            }}</strong>
+                            to you, with message:
+                            <strong>{{
+                                getRecommendationDetails(recommendation).message
+                            }}</strong
+                            >.
+                        </div>
+                        <div>
+                            <button
+                                @click="
+                                    () =>
+                                        acceptRecommendation(
+                                            getRecommendationDetails(
+                                                recommendation
+                                            ),
+                                            recommendation.id
+                                        )
+                                "
+                                class="btn btn-success"
+                            >
+                                Accept
+                            </button>
+                            <button
+                                @click="
+                                    () =>
+                                        rejectRecommendation(recommendation.id)
+                                "
+                                class="btn btn-danger mx-2"
+                            >
+                                Reject
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,6 +110,7 @@
 import { ref, computed } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import Layout from "../Shared/Layout";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
     components: {
@@ -96,13 +137,44 @@ export default {
             showAllLocations.value = !showAllLocations.value;
         };
 
-        const makeRecommendMessage = (recommendedLocation) => {
-            const { user_id, location_id } = recommendedLocation;
-            const user = props.allUsers.find((u) => u.id === user_id);
-            const location = props.allLocations.find(
-                (l) => l.id === location_id
-            );
-            return `User ${user.name} recommends you The following location: ${location.title} (${location.description}) to you.`;
+        const getLocationById = (id) => {
+            return props.allLocations.find((l) => l.id === id);
+        };
+        const getUserById = (id) => {
+            return props.allUsers.find((u) => u.id === id);
+        };
+
+        const getRecommendationDetails = (recommendedLocation) => {
+            const { user_id, location_id, message } = recommendedLocation;
+            const user = getUserById(user_id);
+            const location = getLocationById(location_id);
+            return {
+                user,
+                location,
+                message,
+            };
+        };
+
+        const acceptRecommendation = (recommendation, id) => {
+            const {
+                longitude,
+                latitude,
+                title,
+                description,
+            } = recommendation.location;
+            const req = {
+                longitude: longitude,
+                latitude: latitude,
+                user_id: userInfo.value.id,
+                title: title,
+                description: description,
+            };
+            Inertia.post("/locations", req);
+            // Inertia.delete(`/recommendations/${id}`);
+        };
+
+        const rejectRecommendation = (id) => {
+            Inertia.delete(`/recommendations/${id}`);
         };
 
         return {
@@ -111,7 +183,9 @@ export default {
             toggleShowLocations,
             toggleButtonText,
             recommendedLocations,
-            makeRecommendMessage,
+            getRecommendationDetails,
+            acceptRecommendation,
+            rejectRecommendation,
         };
     },
 };
@@ -119,5 +193,12 @@ export default {
 <style scoped>
 h3 {
     padding-top: 0.4 rem;
+}
+
+.recommend-wrapper {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

@@ -14356,6 +14356,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
 
 
 
@@ -14383,16 +14385,49 @@ __webpack_require__.r(__webpack_exports__);
       showAllLocations.value = !showAllLocations.value;
     };
 
-    var makeRecommendMessage = function makeRecommendMessage(recommendedLocation) {
+    var getLocationById = function getLocationById(id) {
+      return props.allLocations.find(function (l) {
+        return l.id === id;
+      });
+    };
+
+    var getUserById = function getUserById(id) {
+      return props.allUsers.find(function (u) {
+        return u.id === id;
+      });
+    };
+
+    var getRecommendationDetails = function getRecommendationDetails(recommendedLocation) {
       var user_id = recommendedLocation.user_id,
-          location_id = recommendedLocation.location_id;
-      var user = props.allUsers.find(function (u) {
-        return u.id === user_id;
-      });
-      var location = props.allLocations.find(function (l) {
-        return l.id === location_id;
-      });
-      return "User ".concat(user.name, " recommends you The following location: ").concat(location.title, " (").concat(location.description, ") to you.");
+          location_id = recommendedLocation.location_id,
+          message = recommendedLocation.message;
+      var user = getUserById(user_id);
+      var location = getLocationById(location_id);
+      return {
+        user: user,
+        location: location,
+        message: message
+      };
+    };
+
+    var acceptRecommendation = function acceptRecommendation(recommendation, id) {
+      var _recommendation$locat = recommendation.location,
+          longitude = _recommendation$locat.longitude,
+          latitude = _recommendation$locat.latitude,
+          title = _recommendation$locat.title,
+          description = _recommendation$locat.description;
+      var req = {
+        longitude: longitude,
+        latitude: latitude,
+        user_id: userInfo.value.id,
+        title: title,
+        description: description
+      };
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post("/locations", req); // Inertia.delete(`/recommendations/${id}`);
+    };
+
+    var rejectRecommendation = function rejectRecommendation(id) {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.delete("/recommendations/".concat(id));
     };
 
     return {
@@ -14401,7 +14436,9 @@ __webpack_require__.r(__webpack_exports__);
       toggleShowLocations: toggleShowLocations,
       toggleButtonText: toggleButtonText,
       recommendedLocations: recommendedLocations,
-      makeRecommendMessage: makeRecommendMessage
+      getRecommendationDetails: getRecommendationDetails,
+      acceptRecommendation: acceptRecommendation,
+      rejectRecommendation: rejectRecommendation
     };
   }
 });
@@ -18592,6 +18629,12 @@ var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" recommends the following location: ");
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" to you, with message: ");
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(". ");
+
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
@@ -18633,13 +18676,31 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         , ["href"]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.recommendedLocations.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.recommendedLocations, function (location) {
+      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $setup.recommendedLocations.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.recommendedLocations, function (recommendation) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", {
-          key: location.id,
-          "class": "list-group-item list-group-item-action"
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.makeRecommendMessage(location)), 1
+          key: recommendation.id,
+          "class": "list-group-item list-group-item-action recommend-wrapper"
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.getRecommendationDetails(recommendation).user.name), 1
         /* TEXT */
-        );
+        ), _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.getRecommendationDetails(recommendation).location.title), 1
+        /* TEXT */
+        ), _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.getRecommendationDetails(recommendation).message), 1
+        /* TEXT */
+        ), _hoisted_21]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+          onClick: function onClick() {
+            return $setup.acceptRecommendation($setup.getRecommendationDetails(recommendation), recommendation.id);
+          },
+          "class": "btn btn-success"
+        }, " Accept ", 8
+        /* PROPS */
+        , ["onClick"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+          onClick: function onClick() {
+            return $setup.rejectRecommendation(recommendation.id);
+          },
+          "class": "btn btn-danger mx-2"
+        }, " Reject ", 8
+        /* PROPS */
+        , ["onClick"])])]);
       }), 128
       /* KEYED_FRAGMENT */
       ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
@@ -20335,7 +20396,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nh3[data-v-097ba13b] {\n    padding-top: 0.4 rem;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nh3[data-v-097ba13b] {\n    padding-top: 0.4 rem;\n}\n.recommend-wrapper[data-v-097ba13b] {\n    display: flex;\n    gap: 2rem;\n    justify-content: space-between;\n    align-items: center;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -20407,7 +20468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.main-wrapper {\n    display: flex;\n    flex-direction: column;\n    padding: 2rem;\n}\n.add-location-info {\n    padding: 0.5rem 0 0.5rem 2rem;\n    background-color: #e9ecef;\n    font-size: 1.2em;\n    font-weight: 500;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.main-wrapper {\n    display: flex;\n    flex-direction: column;\n    padding: 1rem;\n}\n.add-location-info {\n    padding: 0.5rem 0 0.5rem 2rem;\n    background-color: #e9ecef;\n    font-size: 1.2em;\n    font-weight: 500;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -20455,7 +20516,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.location-form,\n.recommend-form {\n    position: absolute;\n    top: 220px;\n    left: 40px;\n    display: block;\n    padding: 1rem;\n    background-color: white;\n    z-index: 9999;\n}\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 2rem 0;\n    display: block;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.location-form,\n.recommend-form {\n    position: absolute;\n    top: 220px;\n    left: 40px;\n    display: block;\n    padding: 1rem;\n    background-color: white;\n    z-index: 9999;\n}\n.basemap {\n    height: 38em;\n    width: 40em;\n}\n.popup-marker {\n    position: absolute;\n    top: 140px;\n    z-index: 9999;\n}\n.leaflet-grab {\n    cursor: default;\n}\n.mode-switch {\n    padding: 1rem 0;\n    display: block;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

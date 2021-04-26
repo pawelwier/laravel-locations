@@ -19,5 +19,5 @@ Route::resource('locations',  App\Http\Controllers\LocationController::class)
 
 Route::resource('recommendations',  App\Http\Controllers\RecommendationController::class)
     ->middleware(['auth:sanctum', 'verified'])
-    ->only('store')
+    ->only('store', 'destroy')
     ->name('*', 'recommendations');
